@@ -5,15 +5,15 @@ import vercel from '@astrojs/vercel';
 
 export default defineConfig({
   integrations: [react(), tailwind()],
-  output: 'hybrid', // ← Cambio de 'server' a 'hybrid'
+  output: 'server', // ← Usa 'server' o 'static'
   adapter: vercel(),
   vite: {
     build: {
       rollupOptions: {
         output: {
-          manualChunks: undefined
-        }
-      }
-    }
-  }
+          manualChunks: undefined,
+        },
+      },
+    },
+  },
 });

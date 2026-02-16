@@ -1,5 +1,6 @@
 ---
 export const prerender = true; // ← Página estática con caché en CDN
+export const revalidate = 3600; // ← Se regenera cada 1 hora (3600 segundos)
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
