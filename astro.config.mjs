@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
-import vercel from '@astrojs/vercel';
+import vercel from '@astrojs/vercel/serverless';
 
 export default defineConfig({
   integrations: [react(), tailwind()],
@@ -9,16 +9,5 @@ export default defineConfig({
   adapter: vercel({
     webAnalytics: { enabled: false },
     speedInsights: { enabled: false },
-    edgeMiddleware: false,
-    functionPerRoute: false, // ← Añade esto
   }),
-  vite: {
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks: undefined,
-        },
-      },
-    },
-  },
 });
