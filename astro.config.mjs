@@ -5,8 +5,13 @@ import vercel from '@astrojs/vercel';
 
 export default defineConfig({
   integrations: [react(), tailwind()],
-  output: 'server', // ← Usa 'server' o 'static'
-  adapter: vercel(),
+  output: 'server',
+  adapter: vercel({
+    webAnalytics: { enabled: false },
+    speedInsights: { enabled: false },
+    edgeMiddleware: false,
+    functionPerRoute: false, // ← Añade esto
+  }),
   vite: {
     build: {
       rollupOptions: {
