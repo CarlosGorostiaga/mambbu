@@ -43,57 +43,73 @@
         </div>
       </div>
 
-      <!-- Tarjetas de ubicaciones en lugar de imagen de equipo -->
+      <!-- Tarjetas de ubicaciones con imágenes y gradientes -->
       <div class="grid grid-cols-2 gap-4">
         <!-- Cuba -->
-        <div
-          class="bg-gradient-to-br from-primary to-primary/80 p-6 postcard-border text-white relative overflow-hidden group hover:scale-105 transition-transform"
-        >
-          <div class="absolute top-0 right-0 w-32 h-32 bg-sea-glass/10 rounded-full -mr-16 -mt-16">
+        <div class="relative h-48 postcard-border overflow-hidden group cursor-pointer">
+          <img
+            src="/images/hero-havana.jpg"
+            alt="La Habana"
+            class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-cuba-red/80 via-primary/60 to-primary/80 group-hover:opacity-90 transition-opacity"
+          >
           </div>
-          <div class="relative z-10">
-            <div class="text-4xl mb-2">🇨🇺</div>
-            <div class="font-serif text-2xl italic font-bold mb-2">La Habana</div>
-            <div class="text-sm text-white/80">Donde todo comienza</div>
+          <div class="relative z-10 h-full flex flex-col justify-end p-6 text-white">
+            <div class="font-serif text-2xl italic font-bold mb-1">La Habana</div>
+            <div class="text-sm text-white/90">Donde todo comienza</div>
           </div>
         </div>
 
         <!-- Miami -->
-        <div
-          class="bg-gradient-to-br from-cuba-red to-cuba-red/80 p-6 postcard-border text-white relative overflow-hidden group hover:scale-105 transition-transform"
-        >
-          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16">
+        <div class="relative h-48 postcard-border overflow-hidden group cursor-pointer">
+          <img
+            src="/images/property-1.jpg"
+            alt="Miami"
+            class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-blue-600/80 via-cuba-red/60 to-cuba-red/80 group-hover:opacity-90 transition-opacity"
+          >
           </div>
-          <div class="relative z-10">
-            <div class="text-4xl mb-2">🇺🇸</div>
-            <div class="font-serif text-2xl italic font-bold mb-2">Miami</div>
-            <div class="text-sm text-white/80">Nuestra familia allá</div>
+          <div class="relative z-10 h-full flex flex-col justify-end p-6 text-white">
+            <div class="font-serif text-2xl italic font-bold mb-1">Miami</div>
+            <div class="text-sm text-white/90">Nuestra familia allá</div>
           </div>
         </div>
 
         <!-- España -->
-        <div
-          class="bg-gradient-to-br from-sea-glass to-sea-glass/80 p-6 postcard-border text-white relative overflow-hidden group hover:scale-105 transition-transform"
-        >
-          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16">
+        <div class="relative h-48 postcard-border overflow-hidden group cursor-pointer">
+          <img
+            src="/images/property-2.jpg"
+            alt="España"
+            class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-red-600/80 via-yellow-500/60 to-red-600/80 group-hover:opacity-90 transition-opacity"
+          >
           </div>
-          <div class="relative z-10">
-            <div class="text-4xl mb-2">🇪🇸</div>
-            <div class="font-serif text-2xl italic font-bold mb-2">España</div>
-            <div class="text-sm text-white/80">Conectando raíces</div>
+          <div class="relative z-10 h-full flex flex-col justify-end p-6 text-white">
+            <div class="font-serif text-2xl italic font-bold mb-1">España</div>
+            <div class="text-sm text-white/90">Conectando raíces</div>
           </div>
         </div>
 
         <!-- México -->
-        <div
-          class="bg-gradient-to-br from-accent-gold to-accent-gold/80 p-6 postcard-border text-white relative overflow-hidden group hover:scale-105 transition-transform"
-        >
-          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16">
+        <div class="relative h-48 postcard-border overflow-hidden group cursor-pointer">
+          <img
+            src="/images/property-3.jpg"
+            alt="México"
+            class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-green-700/80 via-white/40 to-red-600/80 group-hover:opacity-90 transition-opacity"
+          >
           </div>
-          <div class="relative z-10">
-            <div class="text-4xl mb-2">🇲🇽</div>
-            <div class="font-serif text-2xl italic font-bold mb-2">México</div>
-            <div class="text-sm text-white/80">Puente al Caribe</div>
+          <div class="relative z-10 h-full flex flex-col justify-end p-6 text-white">
+            <div class="font-serif text-2xl italic font-bold mb-1">México</div>
+            <div class="text-sm text-white/90">Puente al Caribe</div>
           </div>
         </div>
       </div>
