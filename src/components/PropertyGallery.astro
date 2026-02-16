@@ -1,0 +1,72 @@
+---
+import type { PropertyImage } from '../types/property';
+
+export interface Props {
+  images: PropertyImage[];
+  title: string;
+}
+
+const { images, title } = Astro.props;
+const mainImage = images[0];
+const thumbnails = images.slice(1, 4); // Mostrar hasta 3 thumbnails
+---
+
+<section class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-3 mb-12 h-[300px] md:h-[500px]">
+  <!-- Imagen principal -->
+  <div class="md:col-span-2 md:row-span-2 relative overflow-hidden postcard-border group cursor-pointer">
+    <img 
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+      src={mainImage.url}
+      alt={mainImage.alt}
+      loading="eager"
+      decoding="async"
+    />
+  </div>
+
+  <!-- Thumbnail superior derecha -->
+  {thumbnails[0] && (
+    <div class="hidden md:block md:col-span-2 relative overflow-hidden postcard-border group cursor-pointer">
+      <img 
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+        src={thumbnails[0].url}
+        alt={thumbnails[0].alt}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )}
+
+  <!-- Thumbnail inferior izquierda -->
+  {thumbnails[1] && (
+    <div class="hidden md:block relative overflow-hidden postcard-border group cursor-pointer">
+      <img 
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+        src={thumbnails[1].url}
+        alt={thumbnails[1].alt}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )}
+
+  <!-- Thumbnail inferior derecha + contador -->
+  {thumbnails[2] && (
+    <div class="hidden md:block relative overflow-hidden postcard-border group cursor-pointer">
+      {images.length > 4 && (
+        <div class="absolute inset-0 bg-black/40 flex items-center justify-center text-white font-bold transition-colors hover:bg-black/50 z-10">
+          <div class="flex flex-col items-center gap-2">
+            <span class="material-symbols-outlined text-4xl">photo_library</span>
+            <span class="text-lg font-bold uppercase tracking-wider">+{images.length - 4} Fotos</span>
+          </div>
+        </div>
+      )}
+      <img 
+        class="w-full h-full object-cover" 
+        src={thumbnails[2].url}
+        alt={thumbnails[2].alt}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  )}
+</section>

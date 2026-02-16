@@ -1,0 +1,45 @@
+---
+import PropertyCard from './PropertyCard.astro';
+import type { Property } from '../types/property';
+
+export interface Props {
+  properties: Property[];
+}
+
+const { properties } = Astro.props;
+---
+
+{properties.length > 0 && (
+  <section class="mt-20 pt-16 border-t-2 border-sea-glass">
+    <div class="flex items-center justify-between mb-10">
+      <h3 class="text-3xl font-serif font-bold italic">Propiedades Similares</h3>
+      <div class="flex gap-2">
+        <button class="size-10 border border-gray-200 flex items-center justify-center hover:border-sea-glass transition-colors">
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <button class="size-10 border border-gray-200 flex items-center justify-center hover:border-sea-glass transition-colors">
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {properties.map((property) => (
+        <PropertyCard 
+          title={property.title}
+          location={property.location}
+          locationDistrict={property.locationDistrict}
+          price={property.price}
+          bedrooms={property.bedrooms}
+          bathrooms={property.bathrooms}
+          area={property.area}
+          image={property.images[0].url}
+          featured={property.featured}
+          newListing={property.newListing}
+          verified={property.verified}
+          slug={property.slug}
+        />
+      ))}
+    </div>
+  </section>
+)}

@@ -1,6 +1,6 @@
 ---
-export const prerender = true; // ← Página estática con caché en CDN
-export const revalidate = 3600; // ← Se regenera cada 1 hora (3600 segundos)
+export const prerender = true;
+export const revalidate = 3600;
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
@@ -24,7 +24,7 @@ const featuredProperties = [
     area: '420m²',
     image: '/images/property-1.jpg',
     featured: true,
-    slug: 'mansion-anos-50-miramar',
+    slug: 'mansion-anos-50-miramar', // ✅ Correcto
   },
   {
     title: 'Ático con Vistas al Malecón',
@@ -36,7 +36,7 @@ const featuredProperties = [
     area: '115m²',
     image: '/images/property-2.jpg',
     newListing: true,
-    slug: 'atico-vistas-malecon-vedado',
+    slug: 'atico-vistas-malecon-vedado', // ✅ Correcto
   },
   {
     title: 'Palacete Colonial Restaurado',
@@ -48,7 +48,7 @@ const featuredProperties = [
     area: '510m²',
     image: '/images/property-3.jpg',
     verified: true,
-    slug: 'palacete-colonial-habana-vieja',
+    slug: 'palacete-colonial-habana-vieja', // ✅ Correcto (faltaba este)
   },
 ];
 

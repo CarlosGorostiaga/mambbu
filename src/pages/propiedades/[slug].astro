@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PropertyGallery from '../../components/PropertyGallery.astro';
+import PropertyInfo from '../../components/PropertyInfo.astro';
+import PropertyAgent from '../../components/PropertyAgent.astro';
+import PropertySimilar from '../../components/PropertySimilar.astro';
+import { getPropertyBySlug, properties } from '../../data/properties';
+
+// SSR dinámico - sin prerender
+export const prerender = false;
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/');
+}
+
+const property = getPropertyBySlug(slug);
+
+if (!property) {
+  return Astro.redirect('/404');
+}
+
+// Obtener propiedades similares
+const similarProperties = property.similarProperties 
+  ? properties.filter(p => property.similarProperties?.includes(p.slug))
+  : properties.filter(p => p.id !== property.id && p.location === property.location).slice(0, 3);
+---
+
+<BaseLayout title={`${property.title} - ${property.location} | Mambbu`}>
+  <Header />
+
+  <main class="max-w-[1440px] mx-auto px-6 py-8">
+    
+    <!-- Breadcrumbs -->
+    <nav class="flex text-[10px] uppercase tracking-widest text-gray-400 mb-6 font-bold">
+      <a class="hover:text-sea-glass" href="/">Inicio</a>
+      <span class="mx-2">/</span>
+      <a class="hover:text-sea-glass" href="/propiedades">Propiedades</a>
+      <span class="mx-2">/</span>
+      <a class="hover:text-sea-glass" href={`/barrios/${property.location.toLowerCase()}`}>{property.location}</a>
+      <span class="mx-2">/</span>
+      <span class="text-primary">{property.title}</span>
+    </nav>
+
+    <!-- Property Title & Actions -->
+    <div class="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-8">
+      <div class="flex-1">
+        <h1 class="text-5xl font-serif font-bold italic leading-tight mb-3">{property.title}</h1>
+        <div class="flex items-center gap-2 text-gray-500 text-sm">
+          <span class="material-symbols-outlined text-sm">location_on</span>
+          <span class="font-serif italic">{property.location}, {property.locationDistrict}, La Habana</span>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button class="flex items-center gap-2 px-5 py-3 border border-gray-200 hover:border-sea-glass text-sm font-bold uppercase tracking-wider transition-colors">
+          <span class="material-symbols-outlined text-lg">share</span>
+          Compartir
+        </button>
+        <button class="flex items-center gap-2 px-5 py-3 border border-gray-200 hover:border-cuba-red hover:text-cuba-red text-sm font-bold uppercase tracking-wider transition-colors">
+          <span class="material-symbols-outlined text-lg">favorite</span>
+          Guardar
+        </button>
+      </div>
+    </div>
+
+    <!-- Image Gallery -->
+    <PropertyGallery images={property.images} title={property.title} />
+
+    <!-- Main Content Grid -->
+    <div class="flex flex-col lg:flex-row gap-12">
+      
+      <!-- Property Info -->
+      <PropertyInfo 
+        title={property.title}
+        location={property.location}
+        locationDistrict={property.locationDistrict}
+        price={property.price}
+        bedrooms={property.bedrooms}
+        bathrooms={property.bathrooms}
+        area={property.area}
+        yearBuilt={property.yearBuilt}
+        description={property.description}
+        amenities={property.amenities}
+        featured={property.featured}
+        newListing={property.newListing}
+      />
+
+      <!-- Agent Sidebar -->
+      <PropertyAgent agent={property.agent} />
+
+    </div>
+
+    <!-- Similar Properties -->
+    <PropertySimilar properties={similarProperties} />
+
+  </main>
+
+  <Footer />
+</BaseLayout>

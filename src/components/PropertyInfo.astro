@@ -1,0 +1,155 @@
+---
+export interface Props {
+  title: string;
+  location: string;
+  locationDistrict: string;
+  price: string;
+  bedrooms: number;
+  bathrooms: number;
+  area: string;
+  yearBuilt?: number;
+  description: string;
+  amenities: string[];
+  featured?: boolean;
+  newListing?: boolean;
+}
+
+const { 
+  title, 
+  location, 
+  locationDistrict, 
+  price, 
+  bedrooms, 
+  bathrooms, 
+  area, 
+  yearBuilt,
+  description,
+  amenities,
+  featured,
+  newListing
+} = Astro.props;
+---
+
+<div class="flex-1 max-w-3xl">
+  
+  <!-- Badges y título -->
+  <div class="mb-8">
+    <div class="flex items-center gap-3 mb-3">
+      {featured && (
+        <span class="cuba-badge">★ Anuncio Destacado</span>
+      )}
+      {newListing && (
+        <span class="bg-sea-glass text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest">
+          Nuevo Ingreso
+        </span>
+      )}
+    </div>
+    <h2 class="text-5xl font-serif font-bold italic leading-tight mb-3">{title}</h2>
+    <div class="flex items-center gap-2 text-gray-500 text-sm">
+      <span class="material-symbols-outlined text-sm">location_on</span>
+      <span class="font-serif italic">{location}, {locationDistrict}, La Habana</span>
+    </div>
+  </div>
+
+  <!-- Key Facts -->
+  <section class="grid grid-cols-2 md:grid-cols-5 gap-6 mb-12 py-8 border-y-2 border-sea-glass">
+    <div class="text-center">
+      <div class="postal-stamp inline-block rotate-2 mb-2">
+        <span class="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1">Precio</span>
+        <span class="text-2xl font-bold">{price}</span>
+      </div>
+    </div>
+    <div class="text-center">
+      <span class="block text-[10px] uppercase font-bold text-gray-400 mb-2">Habitaciones</span>
+      <div class="flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-sea-glass text-2xl">bed</span>
+        <span class="text-3xl font-serif italic font-bold">{bedrooms}</span>
+      </div>
+    </div>
+    <div class="text-center">
+      <span class="block text-[10px] uppercase font-bold text-gray-400 mb-2">Baños</span>
+      <div class="flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-sea-glass text-2xl">bathtub</span>
+        <span class="text-3xl font-serif italic font-bold">{bathrooms}</span>
+      </div>
+    </div>
+    <div class="text-center">
+      <span class="block text-[10px] uppercase font-bold text-gray-400 mb-2">Área Total</span>
+      <div class="flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-sea-glass text-2xl">square_foot</span>
+        <span class="text-3xl font-serif italic font-bold">{area}</span>
+      </div>
+    </div>
+    {yearBuilt && (
+      <div class="text-center">
+        <span class="block text-[10px] uppercase font-bold text-gray-400 mb-2">Año</span>
+        <div class="flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-sea-glass text-2xl">calendar_month</span>
+          <span class="text-3xl font-serif italic font-bold">{yearBuilt}</span>
+        </div>
+      </div>
+    )}
+  </section>
+
+  <!-- Description -->
+  <div class="mb-12">
+    <div class="w-16 h-1 bg-sea-glass mb-6"></div>
+    <h3 class="text-3xl font-serif font-bold italic mb-6 leading-tight">
+      Una propiedad única en {location}
+    </h3>
+    <div class="space-y-4 text-lg leading-relaxed text-gray-700 font-serif italic">
+      {description.split('\n\n').map((paragraph) => (
+        <p>{paragraph.trim()}</p>
+      ))}
+    </div>
+  </div>
+
+  <!-- Amenities -->
+  <div class="mb-12 pb-12 border-b border-gray-100">
+    <h4 class="text-xl font-bold uppercase tracking-widest mb-6">Características Principales</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {amenities.map((amenity) => (
+        <div class="flex items-center gap-3 text-sm">
+          <span class="material-symbols-outlined text-sea-glass">check_circle</span>
+          <span>{amenity}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Map Section -->
+  <div class="mb-12">
+    <h4 class="text-xl font-bold uppercase tracking-widest mb-6">Ubicación</h4>
+    <div class="w-full aspect-video postcard-border tile-pattern overflow-hidden relative">
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="bg-white px-6 py-4 border-2 border-primary shadow-lg flex flex-col items-center gap-2">
+          <span class="material-symbols-outlined text-sea-glass text-5xl">location_on</span>
+          <div class="text-center">
+            <span class="block text-xs font-bold uppercase tracking-wider text-gray-400">Zona Postal</span>
+            <span class="block text-lg font-serif italic font-bold">{location}, {locationDistrict}</span>
+            <span class="block text-sm text-gray-500">La Habana, Cuba</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-sea-glass text-sm">directions_walk</span>
+        <span>5ta Avenida - 2 min</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-sea-glass text-sm">restaurant</span>
+        <span>Restaurantes - 5 min</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-sea-glass text-sm">beach_access</span>
+        <span>Playa - 10 min</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-sea-glass text-sm">local_hospital</span>
+        <span>Hospital - 8 min</span>
+      </div>
+    </div>
+  </div>
+
+</div>
