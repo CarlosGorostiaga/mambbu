@@ -1,0 +1,97 @@
+/* Importar fuentes de Google Fonts de forma optimizada */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Font Face Optimization */
+  html {
+    font-feature-settings: 'kern', 'liga', 'clig', 'calt';
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply font-display text-primary antialiased;
+  }
+}
+
+@layer utilities {
+  /* Patrón de azulejos cubanos */
+  .tile-pattern {
+    background-color: #f9f7f2;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30L0 30L0 0L30 0L30 30ZM60 60L30 60L30 30L60 30L60 60Z' fill='%237FD1C8' fill-opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  /* Borde estilo postal */
+  .postcard-border {
+    border: 1px solid #e5e7eb;
+    box-shadow: 5px 5px 0px 0px rgba(11, 44, 60, 0.05);
+  }
+
+  /* Corte de ticket */
+  .ticket-cut {
+    clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
+  }
+
+  /* Sello postal */
+  .postal-stamp {
+    @apply bg-white px-2 py-1 border-2 border-dashed border-sea-glass relative font-serif italic;
+  }
+
+  /* Patrón del hero */
+  .hero-pattern {
+    background-color: #0b2c3c;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30L0 30L0 0L30 0L30 30ZM60 60L30 60L30 30L60 30L60 60Z' fill='%237FD1C8' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  /* Divisor de olas */
+  .wave-divider {
+    background: repeat-x bottom;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 Q 25 0, 50 10 T 100 10' fill='none' stroke='%237FD1C8' stroke-width='2' opacity='0.3'/%3E%3C/svg%3E");
+    background-size: 50px 10px;
+    height: 12px;
+    width: 100%;
+  }
+
+  /* Sello de verificación */
+  .verified-stamp {
+    @apply border-2 border-primary rounded-full p-2 -rotate-12 inline-flex items-center justify-center;
+    background: rgba(255, 255, 255, 0.9);
+    color: #0b2c3c;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 10px;
+    line-height: 1;
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Badge de Cuba (anuncios destacados) */
+  .cuba-badge {
+    background: linear-gradient(135deg, #d13438 0%, #b82b2f 100%);
+    @apply text-white px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider rounded-sm;
+    box-shadow: 0 2px 8px rgba(209, 52, 56, 0.3);
+  }
+
+  /* Drop cap editorial */
+  .editorial-drop-cap::first-letter {
+    @apply font-serif text-6xl float-left leading-[0.8] pr-3 text-primary font-bold;
+  }
+}
+
+/* Optimizaciones de rendimiento */
+@layer base {
+  /* Reducir repaints en animaciones */
+  * {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  /* Optimizar transiciones */
+  .group:hover .group-hover\:scale-105 {
+    will-change: transform;
+  }
+}

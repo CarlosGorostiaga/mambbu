@@ -1,0 +1,50 @@
+---
+export interface Props {
+  neighborhoods: Array<{
+    name: string;
+    count: number;
+    image: string;
+  }>;
+}
+
+const { neighborhoods } = Astro.props;
+---
+
+<section class="tile-pattern py-24 px-6">
+  <div class="max-w-[1440px] mx-auto">
+    <div class="text-center mb-16">
+      <span class="text-sea-glass font-bold text-[11px] uppercase tracking-[0.3em] mb-4 block">
+        Explora por Zona
+      </span>
+      <h3 class="font-serif text-5xl italic font-bold text-primary">Barrios Emblemáticos</h3>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {
+        neighborhoods.map((neighborhood) => (
+          <a
+            href={`/barrios/${neighborhood.name.toLowerCase()}`}
+            class="bg-white postcard-border overflow-hidden group cursor-pointer"
+          >
+            <div class="relative h-64 overflow-hidden">
+              <img
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                src={neighborhood.image}
+                alt={neighborhood.name}
+                loading="lazy"
+                decoding="async"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
+              <div class="absolute bottom-6 left-6 right-6">
+                <h4 class="font-serif text-3xl italic font-bold text-white mb-2">
+                  {neighborhood.name}
+                </h4>
+                <p class="text-white/80 text-sm">{neighborhood.count} propiedades disponibles</p>
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

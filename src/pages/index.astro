@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Hero from '../components/Hero.astro';
+import FeaturedProperties from '../components/FeaturedProperties.astro';
+import Stats from '../components/Stats.astro';
+import About from '../components/About.astro';
+import Neighborhoods from '../components/Neighborhoods.astro';
+import CTA from '../components/CTA.astro';
+
+// Datos de propiedades (en producción vendrían de una API o base de datos)
+const featuredProperties = [
+  {
+    title: 'Mansión de los Años 50',
+    location: 'Miramar',
+    locationDistrict: 'Playa',
+    price: '$450,000',
+    bedrooms: 4,
+    bathrooms: 3,
+    area: '420m²',
+    image: '/images/property-1.jpg',
+    featured: true,
+    slug: 'mansion-anos-50-miramar',
+  },
+  {
+    title: 'Ático con Vistas al Malecón',
+    location: 'Vedado',
+    locationDistrict: 'Plaza',
+    price: '$125,000',
+    bedrooms: 2,
+    bathrooms: 2,
+    area: '115m²',
+    image: '/images/property-2.jpg',
+    newListing: true,
+    slug: 'atico-vistas-malecon-vedado',
+  },
+  {
+    title: 'Palacete Colonial Restaurado',
+    location: 'Habana Vieja',
+    locationDistrict: 'Habana Vieja',
+    price: '$280,000',
+    bedrooms: 5,
+    bathrooms: 4,
+    area: '510m²',
+    image: '/images/property-3.jpg',
+    verified: true,
+    slug: 'palacete-colonial-habana-vieja',
+  },
+];
+
+// Barrios emblemáticos
+const neighborhoods = [
+  { name: 'Miramar', count: 87, image: '/images/neighborhood-miramar.jpg' },
+  { name: 'Vedado', count: 124, image: '/images/neighborhood-vedado.jpg' },
+  { name: 'Habana Vieja', count: 56, image: '/images/neighborhood-habana-vieja.jpg' },
+];
+---
+
+<BaseLayout title="Mambbu | Portal Inmobiliario de Cuba">
+  <Header />
+
+  <main>
+    <Hero />
+    <FeaturedProperties properties={featuredProperties} />
+    <Stats />
+    <About />
+    <Neighborhoods neighborhoods={neighborhoods} />
+    <CTA />
+  </main>
+
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,70 @@
+---
+// Footer estático de Astro
+---
+
+<footer class="mt-0 border-t border-primary/10 bg-white py-20 tile-pattern">
+  <div class="max-w-[1440px] mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-16">
+    <div class="space-y-6">
+      <div class="flex items-center gap-3">
+        <div class="size-10 bg-primary text-white flex items-center justify-center rounded-sm -rotate-3">
+          <span class="material-symbols-outlined text-xl">waves</span>
+        </div>
+        <h2 class="text-2xl font-serif font-bold italic tracking-tight text-primary">Mambbu</h2>
+      </div>
+      <p class="text-sm font-serif italic text-gray-600 leading-relaxed">
+        Encuentra tu hogar ideal en Cuba. Conectamos personas con propiedades en toda la isla.
+      </p>
+      <div class="flex gap-4">
+        <a class="text-primary hover:text-sea-glass transition-colors" href="#" aria-label="Sitio web">
+          <span class="material-symbols-outlined">public</span>
+        </a>
+        <a class="text-primary hover:text-cuba-red transition-colors" href="#" aria-label="Instagram">
+          <span class="material-symbols-outlined">camera</span>
+        </a>
+      </div>
+    </div>
+    <div>
+      <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Explorar</h4>
+      <ul class="space-y-4 text-sm font-serif italic text-gray-500">
+        <li><a class="hover:text-sea-glass transition-colors" href="#">Casas y Chalets</a></li>
+        <li><a class="hover:text-sea-glass transition-colors" href="#">Apartamentos</a></li>
+        <li><a class="hover:text-sea-glass transition-colors" href="#">Terrenos</a></li>
+        <li><a class="hover:text-sea-glass transition-colors" href="#">Propiedades de Lujo</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Compañía</h4>
+      <ul class="space-y-4 text-sm font-serif italic text-gray-500">
+        <li><a class="hover:text-sea-glass transition-colors" href="#">Nuestra Historia</a></li>
+        <li><a class="hover:text-sea-glass transition-colors" href="#">Agentes y Agencias</a></li>
+        <li><a class="hover:text-sea-glass transition-colors" href="#">Contacto</a></li>
+        <li><a class="hover:text-sea-glass transition-colors" href="#">Ayuda</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Newsletter</h4>
+      <p class="text-sm font-serif italic text-gray-500 mb-6">Recibe nuevas propiedades y ofertas directamente en tu correo.</p>
+      <form class="flex">
+        <input 
+          class="flex-1 bg-white border-primary/20 border-r-0 py-3 px-4 text-sm italic font-serif focus:ring-0 focus:border-sea-glass" 
+          placeholder="Tu correo..." 
+          type="email"
+          name="email"
+        />
+        <button type="submit" class="bg-primary text-white px-4 hover:bg-sea-glass transition-colors">
+          <span class="material-symbols-outlined">mail</span>
+        </button>
+      </form>
+    </div>
+  </div>
+  <div class="max-w-[1440px] mx-auto px-6 mt-20 pt-8 border-t border-primary/5 flex flex-col md:flex-row justify-between items-center gap-6">
+    <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+      © 2024 Mambbu. Portal Inmobiliario de Cuba.
+    </p>
+    <div class="flex gap-6 text-xs text-gray-400">
+      <a class="hover:text-sea-glass transition-colors" href="#">Privacidad</a>
+      <a class="hover:text-sea-glass transition-colors" href="#">Términos</a>
+      <a class="hover:text-sea-glass transition-colors" href="#">Cookies</a>
+    </div>
+  </div>
+</footer>
