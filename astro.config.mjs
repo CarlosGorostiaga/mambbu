@@ -1,19 +1,19 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
-import vercel from '@astrojs/vercel'; // ← Cambiado (quita el /serverless)
+import vercel from '@astrojs/vercel';
 
 export default defineConfig({
   integrations: [react(), tailwind()],
-  output: 'server',
-  adapter: vercel(), // ← Igual, solo cambió el import
+  output: 'hybrid', // ← Cambio de 'server' a 'hybrid'
+  adapter: vercel(),
   vite: {
     build: {
       rollupOptions: {
         output: {
-          manualChunks: undefined,
-        },
-      },
-    },
-  },
+          manualChunks: undefined
+        }
+      }
+    }
+  }
 });
