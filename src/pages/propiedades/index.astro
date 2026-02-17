@@ -10,7 +10,6 @@ import type { PropertyFilters, SortOption } from '../../types/property';
 
 export const prerender = false;
 
-// Leer filtros desde URL params
 const url = new URL(Astro.request.url);
 const params = url.searchParams;
 
@@ -24,13 +23,11 @@ const filters: PropertyFilters = {
   page: params.get('page') ? Number(params.get('page')) : 1,
 };
 
-// Obtener propiedades filtradas
 const { properties, total, totalPages } = getFilteredProperties({
   ...filters,
   perPage: 6,
 });
 
-// Construir URL base para paginación (sin page param)
 const baseParams = new URLSearchParams(params);
 baseParams.delete('page');
 const baseUrl = `/propiedades${baseParams.toString() ? '?' + baseParams.toString() : ''}`;
@@ -40,143 +37,148 @@ const baseUrl = `/propiedades${baseParams.toString() ? '?' + baseParams.toString
   <Header />
 
   <main class="max-w-[1440px] mx-auto px-6 py-8">
-    <div class="flex flex-col lg:flex-row gap-12">
+    <!-- Breadcrumb -->
+    <nav class="flex text-[10px] uppercase tracking-widest text-gray-400 mb-6 font-bold">
+      <a class="hover:text-sea-glass" href="/">Cuba</a>
+      <span class="mx-2">/</span>
+      <span class="text-primary">La Habana</span>
+    </nav>
 
-      <!-- Sidebar Filtros -->
-      <PropertyFilter filters={filters} />
+    <!-- Título + Ordenar -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+      <div>
+        <h1 class="text-4xl font-serif font-bold text-primary italic">
+          {filters.location ? `Viviendas en ${filters.location}` : 'Todas las Propiedades'}
+        </h1>
+        <p class="text-gray-500 font-serif italic mt-2">
+          {total}
+          {total === 1 ? 'propiedad disponible' : 'propiedades disponibles'}
+        </p>
+      </div>
 
-      <!-- Resultados -->
-      <div class="flex-1">
-
-        <!-- Breadcrumb & Título -->
-        <div class="mb-10">
-          <nav class="flex text-[10px] uppercase tracking-widest text-gray-400 mb-3 font-bold">
-            <a class="hover:text-sea-glass" href="/">Cuba</a>
-            <span class="mx-2">/</span>
-            <span class="text-primary">La Habana</span>
-          </nav>
-          <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <h1 class="text-4xl font-serif font-bold text-primary italic">
-                {filters.location ? `Viviendas en ${filters.location}` : 'Todas las Propiedades'}
-              </h1>
-              <p class="text-gray-500 font-serif italic mt-2">
-                {total} {total === 1 ? 'propiedad disponible' : 'propiedades disponibles'}
-              </p>
-            </div>
-
-            <!-- Ordenar -->
-            <div class="flex items-center gap-4">
-              <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Ordenar:</span>
-              <div class="relative border-b-2 border-sea-glass">
-                <select
-                  id="sortBy"
-                  class="appearance-none bg-transparent border-none py-1 pl-0 pr-8 text-sm font-serif italic font-bold text-primary focus:ring-0 cursor-pointer"
-                  onchange="window.location.href = '/propiedades?' + new URLSearchParams({...Object.fromEntries(new URLSearchParams(window.location.search)), sortBy: this.value}).toString()"
-                >
-                  <option value="newest" selected={filters.sortBy === 'newest'}>Más recientes</option>
-                  <option value="price-asc" selected={filters.sortBy === 'price-asc'}>Precio: Menor a mayor</option>
-                  <option value="price-desc" selected={filters.sortBy === 'price-desc'}>Precio: Mayor a menor</option>
-                  <option value="relevance" selected={filters.sortBy === 'relevance'}>Más relevantes</option>
-                </select>
-                <span class="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-sea-glass text-lg">expand_more</span>
-              </div>
-            </div>
-          </div>
+      <div class="flex items-center gap-4">
+        <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Ordenar:</span>
+        <div class="relative border-b-2 border-sea-glass">
+          <select
+            class="appearance-none bg-transparent border-none py-1 pl-0 pr-8 text-sm font-serif italic font-bold text-primary focus:ring-0 cursor-pointer"
+            onchange="window.location.href = '/propiedades?' + new URLSearchParams({...Object.fromEntries(new URLSearchParams(window.location.search)), sortBy: this.value}).toString()"
+          >
+            <option value="newest" selected={filters.sortBy === 'newest'}>Más recientes</option>
+            <option value="price-asc" selected={filters.sortBy === 'price-asc'}
+              >Precio: Menor a mayor</option
+            >
+            <option value="price-desc" selected={filters.sortBy === 'price-desc'}
+              >Precio: Mayor a menor</option
+            >
+            <option value="relevance" selected={filters.sortBy === 'relevance'}
+              >Más relevantes</option
+            >
+          </select>
+          <span
+            class="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-sea-glass text-lg"
+          >
+            expand_more
+          </span>
         </div>
+      </div>
+    </div>
 
-        <!-- Grid de propiedades -->
-        {properties.length > 0 ? (
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {properties.map((property) => (
-              <div class={property.status === 'sold' ? 'opacity-75' : ''}>
-                {property.status === 'sold' ? (
-                  <!-- Propiedad vendida -->
-                  <div class="bg-white postcard-border flex flex-col h-full relative overflow-hidden">
-                    <div class="relative h-72 overflow-hidden border-b border-gray-100 grayscale-[0.5]">
-                      <img
-                        class="w-full h-full object-cover"
-                        src={property.images[0].url}
-                        alt={property.images[0].alt}
-                        loading="lazy"
-                      />
-                      <div class="absolute inset-0 bg-primary/20 flex items-center justify-center">
-                        <div class="bg-white border-2 border-primary py-2 px-6 font-serif italic text-xl -rotate-12 shadow-xl">
-                          Vendido
-                        </div>
-                      </div>
-                      <div class="absolute top-6 right-0 bg-gray-400 text-white py-2 px-6 font-serif italic text-xl ticket-cut">
-                        {property.price}
+    <!-- Botón filtros + indicadores activos -->
+    <PropertyFilter filters={filters} total={total} />
+
+    <!-- Grid de propiedades -->
+    {
+      properties.length > 0 ? (
+        <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-8">
+          {properties.map((property) => (
+            <div class={property.status === 'sold' ? 'opacity-75' : ''}>
+              {property.status === 'sold' ? (
+                <div class="bg-white postcard-border flex flex-col h-full relative overflow-hidden">
+                  <div class="relative h-72 overflow-hidden border-b border-gray-100 grayscale-[0.5]">
+                    <img
+                      class="w-full h-full object-cover"
+                      src={property.images[0].url}
+                      alt={property.images[0].alt}
+                      loading="lazy"
+                    />
+                    <div class="absolute inset-0 bg-primary/20 flex items-center justify-center">
+                      <div class="bg-white border-2 border-primary py-2 px-6 font-serif italic text-xl -rotate-12 shadow-xl">
+                        Vendido
                       </div>
                     </div>
-                    <div class="p-8 flex flex-col flex-1">
-                      <div class="flex items-start justify-between mb-4">
-                        <h3 class="font-serif font-bold text-2xl italic leading-tight text-gray-400">{property.title}</h3>
-                        <div class="postal-stamp -rotate-2 bg-gray-50 border-gray-200">
-                          <span class="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1">Zona Postal</span>
-                          <span class="text-sm text-gray-400">{property.location}</span>
-                        </div>
+                    <div class="absolute top-6 right-0 bg-gray-400 text-white py-2 px-6 font-serif italic text-xl ticket-cut">
+                      {property.price}
+                    </div>
+                  </div>
+                  <div class="p-8 flex flex-col flex-1">
+                    <div class="flex items-start justify-between mb-4">
+                      <h3 class="font-serif font-bold text-2xl italic leading-tight text-gray-400">
+                        {property.title}
+                      </h3>
+                      <div class="postal-stamp -rotate-2 bg-gray-50 border-gray-200">
+                        <span class="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1">
+                          Zona Postal
+                        </span>
+                        <span class="text-sm text-gray-400">{property.location}</span>
                       </div>
-                      <div class="mt-auto pt-6 flex items-center gap-6 border-t border-gray-50 opacity-50">
-                        <div class="text-center">
-                          <span class="block text-[10px] uppercase font-bold text-gray-400">Hab</span>
-                          <span class="text-lg font-serif italic">{property.bedrooms}</span>
-                        </div>
-                        <div class="text-center">
-                          <span class="block text-[10px] uppercase font-bold text-gray-400">Área</span>
-                          <span class="text-lg font-serif italic">{property.area}</span>
-                        </div>
+                    </div>
+                    <div class="mt-auto pt-6 flex items-center gap-6 border-t border-gray-50 opacity-50">
+                      <div class="text-center">
+                        <span class="block text-[10px] uppercase font-bold text-gray-400">Hab</span>
+                        <span class="text-lg font-serif italic">{property.bedrooms}</span>
+                      </div>
+                      <div class="text-center">
+                        <span class="block text-[10px] uppercase font-bold text-gray-400">
+                          Área
+                        </span>
+                        <span class="text-lg font-serif italic">{property.area}</span>
                       </div>
                     </div>
                   </div>
-                ) : (
-                  <PropertyCard
-                    title={property.title}
-                    location={property.location}
-                    locationDistrict={property.locationDistrict}
-                    price={property.price}
-                    bedrooms={property.bedrooms}
-                    bathrooms={property.bathrooms}
-                    area={property.area}
-                    image={property.images[0].url}
-                    featured={property.featured}
-                    newListing={property.newListing}
-                    verified={property.verified}
-                    slug={property.slug}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <!-- Sin resultados -->
-          <div class="text-center py-24 postcard-border bg-white">
-            <span class="material-symbols-outlined text-6xl text-gray-200 mb-4 block">search_off</span>
-            <h3 class="text-2xl font-serif italic font-bold text-gray-400 mb-4">
-              No encontramos propiedades
-            </h3>
-            <p class="text-gray-400 mb-8 font-serif italic">
-              Prueba ajustando los filtros de búsqueda
-            </p>
+                </div>
+              ) : (
+                <PropertyCard
+                  title={property.title}
+                  location={property.location}
+                  locationDistrict={property.locationDistrict}
+                  price={property.price}
+                  bedrooms={property.bedrooms}
+                  bathrooms={property.bathrooms}
+                  area={property.area}
+                  image={property.images[0].url}
+                  featured={property.featured}
+                  newListing={property.newListing}
+                  verified={property.verified}
+                  slug={property.slug}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-24 postcard-border bg-white mt-8">
+          <span class="material-symbols-outlined text-6xl text-gray-200 mb-4 block">
+            search_off
+          </span>
+          <h3 class="text-2xl font-serif italic font-bold text-gray-400 mb-4">
+            No encontramos propiedades
+          </h3>
+          <p class="text-gray-400 mb-8 font-serif italic">
+            Prueba ajustando los filtros de búsqueda
+          </p>
 
-            <a
-              href="/propiedades"
-              class="bg-primary text-white px-8 py-4 font-bold uppercase tracking-wider text-sm hover:bg-sea-glass hover:text-primary transition-all"
-            >
-              Ver todas las propiedades
-            </a>
-          </div>
-        )}
+          <a
+            href="/propiedades"
+            class="bg-primary text-white px-8 py-4 font-bold uppercase tracking-wider text-sm hover:bg-sea-glass hover:text-primary transition-all"
+          >
+            Ver todas las propiedades
+          </a>
+        </div>
+      )
+    }
 
-        <!-- Paginación -->
-        <Pagination
-          currentPage={filters.page || 1}
-          totalPages={totalPages}
-          baseUrl={baseUrl}
-        />
-
-      </div>
-    </div>
+    <!-- Paginación -->
+    <Pagination currentPage={filters.page || 1} totalPages={totalPages} baseUrl={baseUrl} />
   </main>
 
   <Footer />

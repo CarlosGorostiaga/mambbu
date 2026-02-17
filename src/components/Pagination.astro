@@ -2,12 +2,11 @@
 export interface Props {
   currentPage: number;
   totalPages: number;
-  baseUrl: string; // ej: "/propiedades?location=Miramar"
+  baseUrl: string;
 }
 
 const { currentPage, totalPages, baseUrl } = Astro.props;
 
-// Generar array de páginas a mostrar
 const getPages = () => {
   const pages: (number | '...')[] = [];
 
@@ -16,7 +15,6 @@ const getPages = () => {
   }
 
   pages.push(1);
-
   if (currentPage > 3) pages.push('...');
 
   for (
@@ -43,12 +41,13 @@ const buildUrl = (page: number) => {
 ---
 
 {totalPages > 1 && (
-  <div class="mt-20 flex items-center justify-center gap-4">
+  <div id="pagination" class="mt-20 flex items-center justify-center gap-4">
     <!-- Anterior -->
     {currentPage > 1 ? (
       <a
         href={buildUrl(currentPage - 1)}
-        class="size-12 flex items-center justify-center border border-gray-200 hover:border-sea-glass transition-colors"
+        data-page={currentPage - 1}
+        class="pagination-link size-12 flex items-center justify-center border border-gray-200 hover:border-sea-glass transition-colors"
       >
         <span class="material-symbols-outlined">chevron_left</span>
       </a>
@@ -66,7 +65,8 @@ const buildUrl = (page: number) => {
         ) : (
           <a
             href={buildUrl(page as number)}
-            class={`size-12 flex items-center justify-center font-serif italic text-lg transition-colors ${
+            data-page={page}
+            class={`pagination-link size-12 flex items-center justify-center font-serif italic text-lg transition-colors ${
               page === currentPage
                 ? 'bg-primary text-white'
                 : 'hover:bg-gray-50 border border-transparent hover:border-gray-200'
@@ -82,7 +82,8 @@ const buildUrl = (page: number) => {
     {currentPage < totalPages ? (
       <a
         href={buildUrl(currentPage + 1)}
-        class="size-12 flex items-center justify-center border border-gray-200 hover:border-sea-glass transition-colors"
+        data-page={currentPage + 1}
+        class="pagination-link size-12 flex items-center justify-center border border-gray-200 hover:border-sea-glass transition-colors"
       >
         <span class="material-symbols-outlined">chevron_right</span>
       </a>
@@ -93,3 +94,50 @@ const buildUrl = (page: number) => {
     )}
   </div>
 )}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('properties-grid');
+    const links = document.querySelectorAll('.pagination-link');
+
+    links.forEach(link => {
+      link.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const href = (link as HTMLAnchorElement).href;
+
+        // Guardar posición del grid
+        const gridTop = grid?.getBoundingClientRect().top ?? 0;
+        const scrollY = window.scrollY + gridTop - 100; // 100px de margen
+
+        // Navegar a la nueva URL
+        const response = await fetch(href);
+        const html = await response.text();
+
+        // Parsear el HTML recibido
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        // Reemplazar solo el grid de propiedades
+        const newGrid = doc.getElementById('properties-grid');
+        const newPagination = doc.getElementById('pagination');
+
+        if (newGrid && grid) {
+          grid.innerHTML = newGrid.innerHTML;
+        }
+
+        // Actualizar paginación
+        const paginationEl = document.getElementById('pagination');
+        if (newPagination && paginationEl) {
+          paginationEl.outerHTML = newPagination.outerHTML;
+        }
+
+        // Actualizar URL sin recargar
+        history.pushState({}, '', href);
+
+        // Scroll a la posición del grid (no al top)
+        window.scrollTo({ top: scrollY, behavior: 'instant' });
+      });
+    });
+  });
+</script>
