@@ -1,0 +1,95 @@
+---
+export interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string; // ej: "/propiedades?location=Miramar"
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+// Generar array de páginas a mostrar
+const getPages = () => {
+  const pages: (number | '...')[] = [];
+
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  pages.push(1);
+
+  if (currentPage > 3) pages.push('...');
+
+  for (
+    let i = Math.max(2, currentPage - 1);
+    i <= Math.min(totalPages - 1, currentPage + 1);
+    i++
+  ) {
+    pages.push(i);
+  }
+
+  if (currentPage < totalPages - 2) pages.push('...');
+
+  pages.push(totalPages);
+
+  return pages;
+};
+
+const pages = getPages();
+
+const buildUrl = (page: number) => {
+  const separator = baseUrl.includes('?') ? '&' : '?';
+  return `${baseUrl}${separator}page=${page}`;
+};
+---
+
+{totalPages > 1 && (
+  <div class="mt-20 flex items-center justify-center gap-4">
+    <!-- Anterior -->
+    {currentPage > 1 ? (
+      <a
+        href={buildUrl(currentPage - 1)}
+        class="size-12 flex items-center justify-center border border-gray-200 hover:border-sea-glass transition-colors"
+      >
+        <span class="material-symbols-outlined">chevron_left</span>
+      </a>
+    ) : (
+      <span class="size-12 flex items-center justify-center border border-gray-100 text-gray-300 cursor-not-allowed">
+        <span class="material-symbols-outlined">chevron_left</span>
+      </span>
+    )}
+
+    <!-- Páginas -->
+    <div class="flex items-center gap-2">
+      {pages.map((page) =>
+        page === '...' ? (
+          <span class="px-2 text-gray-400">...</span>
+        ) : (
+          <a
+            href={buildUrl(page as number)}
+            class={`size-12 flex items-center justify-center font-serif italic text-lg transition-colors ${
+              page === currentPage
+                ? 'bg-primary text-white'
+                : 'hover:bg-gray-50 border border-transparent hover:border-gray-200'
+            }`}
+          >
+            {page}
+          </a>
+        )
+      )}
+    </div>
+
+    <!-- Siguiente -->
+    {currentPage < totalPages ? (
+      <a
+        href={buildUrl(currentPage + 1)}
+        class="size-12 flex items-center justify-center border border-gray-200 hover:border-sea-glass transition-colors"
+      >
+        <span class="material-symbols-outlined">chevron_right</span>
+      </a>
+    ) : (
+      <span class="size-12 flex items-center justify-center border border-gray-100 text-gray-300 cursor-not-allowed">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </span>
+    )}
+  </div>
+)}

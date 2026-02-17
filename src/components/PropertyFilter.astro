@@ -1,0 +1,183 @@
+---
+import type { PropertyFilters } from '../types/property';
+
+export interface Props {
+  filters: PropertyFilters;
+}
+
+const { filters } = Astro.props;
+
+const propertyTypes = [
+  { value: 'apartamento-colonial', label: 'Apartamento Colonial' },
+  { value: 'casa-independiente', label: 'Casa Independiente' },
+  { value: 'villa-playa', label: 'Villa en la Playa' },
+  { value: 'penthouse', label: 'Penthouse / Ático' },
+  { value: 'palacete', label: 'Palacete / Mansión' },
+];
+
+const locations = ['Miramar', 'Vedado', 'Habana Vieja', 'Centro Habana', 'Cerro', 'Siboney'];
+---
+
+<aside class="w-full lg:w-72 shrink-0">
+  <div class="sticky top-28">
+    <div class="flex items-center justify-between mb-8 pb-2 border-b-2 border-sea-glass">
+      <h2 class="text-xl font-serif font-bold italic">Refinar Búsqueda</h2>
+      <span class="material-symbols-outlined text-sea-glass">tune</span>
+    </div>
+
+    <form method="GET" action="/propiedades" class="space-y-8">
+      <!-- Precio -->
+      <div class="group">
+        <label
+          class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 block group-hover:text-sea-glass transition-colors"
+        >
+          Presupuesto (USD)
+        </label>
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <input
+              name="minPrice"
+              type="number"
+              value={filters.minPrice || ''}
+              placeholder="Mín"
+              class="w-full bg-white border-gray-200 text-sm py-2 px-3 focus:ring-sea-glass focus:border-sea-glass"
+            />
+            <span class="text-gray-300">—</span>
+            <input
+              name="maxPrice"
+              type="number"
+              value={filters.maxPrice || ''}
+              placeholder="Máx"
+              class="w-full bg-white border-gray-200 text-sm py-2 px-3 focus:ring-sea-glass focus:border-sea-glass"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Tipo de Inmueble -->
+      <div>
+        <label class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 block">
+          Tipo de Inmueble
+        </label>
+        <div class="space-y-3">
+          {
+            propertyTypes.map((type) => (
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  name="type"
+                  value={type.value}
+                  checked={filters.type === type.value}
+                  class="rounded-none border-gray-300 text-sea-glass focus:ring-sea-glass size-4"
+                />
+                <span class="text-sm font-serif italic text-gray-700 group-hover:text-primary">
+                  {type.label}
+                </span>
+              </label>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Ubicación -->
+      <div>
+        <label class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 block">
+          Ubicación
+        </label>
+        <div class="space-y-3">
+          {
+            locations.map((loc) => (
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input
+                  type="radio"
+                  name="location"
+                  value={loc}
+                  checked={filters.location === loc}
+                  class="border-gray-300 text-sea-glass focus:ring-sea-glass size-4"
+                />
+                <span class="text-sm font-serif italic text-gray-700 group-hover:text-primary">
+                  {loc}
+                </span>
+              </label>
+            ))
+          }
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input
+              type="radio"
+              name="location"
+              value=""
+              checked={!filters.location}
+              class="border-gray-300 text-sea-glass focus:ring-sea-glass size-4"
+            />
+            <span class="text-sm font-serif italic text-gray-700 group-hover:text-primary">
+              Todas las zonas
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Habitaciones mínimas -->
+      <div>
+        <label class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 block">
+          Habitaciones mínimas
+        </label>
+        <div class="flex gap-2">
+          {
+            [1, 2, 3, 4, 5].map((num) => (
+              <button
+                type="submit"
+                name="bedrooms"
+                value={num}
+                class={`flex-1 py-2 text-sm font-bold border transition-colors ${
+                  filters.bedrooms === num
+                    ? 'bg-primary text-white border-primary'
+                    : 'border-gray-200 hover:border-sea-glass hover:text-sea-glass'
+                }`}
+              >
+                {num}+
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Mapa Preview -->
+      <div
+        class="relative aspect-square w-full overflow-hidden postcard-border tile-pattern group cursor-pointer"
+      >
+        <div
+          class="absolute inset-0 flex items-center justify-center bg-primary/10 group-hover:bg-primary/5 transition-colors"
+        >
+          <div class="bg-white px-4 py-2 border border-primary shadow-sm flex items-center gap-2">
+            <span class="material-symbols-outlined text-sea-glass">map</span>
+            <span class="text-xs font-bold uppercase tracking-tighter">Ver Mapa</span>
+          </div>
+        </div>
+        <div
+          class="absolute bottom-2 left-2 right-2 h-12 bg-white/80 backdrop-blur-sm border border-gray-100 p-2 text-[10px] leading-tight font-serif italic"
+        >
+          Propiedades en Vedado, Miramar y alrededores
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="space-y-3">
+        <button
+          type="submit"
+          class="w-full bg-primary text-white font-serif italic text-lg py-4 px-6 hover:bg-sea-glass hover:text-primary transition-all shadow-lg flex items-center justify-center gap-2"
+        >
+          Aplicar Filtros
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </button>
+
+        <a
+          href="/propiedades"
+          class="w-full border-2 border-gray-200 text-gray-500 font-bold py-3 px-6 text-sm uppercase tracking-wider hover:border-cuba-red hover:text-cuba-red transition-all flex items-center justify-center gap-2"
+        >
+          <span class="material-symbols-outlined text-sm">close</span>
+          Limpiar filtros
+        </a>
+      </div>
+    </form>
+  </div>
+</aside>
