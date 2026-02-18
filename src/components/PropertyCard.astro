@@ -1,4 +1,6 @@
 ---
+import Icon from './Icon.astro';
+
 export interface Props {
   title: string;
   location: string;
@@ -32,37 +34,45 @@ const {
 
 <div class="bg-white postcard-border group flex flex-col h-full relative overflow-hidden">
   <div class="relative h-80 overflow-hidden border-b border-gray-100">
-    <img 
-      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+    <img
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
       src={image}
       alt={title}
       loading="lazy"
       decoding="async"
     />
     <div class="absolute top-6 left-6 z-10 flex flex-col gap-2">
-      {featured && (
-        <span class="cuba-badge">★ Anuncio Destacado</span>
-      )}
+      {featured && <span class="cuba-badge">★ Anuncio Destacado</span>}
     </div>
-    {verified && (
-      <div class="absolute top-6 left-6 z-10">
-        <div class="verified-stamp">
-          <span class="material-symbols-outlined text-xs mr-1">verified</span>
-          Agencia<br/>Verificada
+    {
+      verified && (
+        <div class="absolute top-6 left-6 z-10">
+          <div class="verified-stamp">
+            <Icon name="verified" class="text-xs mr-1" size={12} />
+            Agencia
+            <br />
+            Verificada
+          </div>
         </div>
-      </div>
-    )}
-    <div class="absolute top-6 right-0 bg-primary text-white py-2 px-6 font-serif italic text-xl ticket-cut shadow-xl">
+      )
+    }
+    <div
+      class="absolute top-6 right-0 bg-primary text-white py-2 px-6 font-serif italic text-xl ticket-cut shadow-xl"
+    >
       {price}
     </div>
-    {newListing && (
-      <div class="absolute bottom-4 left-4 bg-sea-glass text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest">
-        Nuevo Ingreso
-      </div>
-    )}
+    {
+      newListing && (
+        <div class="absolute bottom-4 left-4 bg-sea-glass text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest">
+          Nuevo Ingreso
+        </div>
+      )
+    }
     <div class="absolute bottom-4 right-4 flex gap-2">
-      <button class="size-10 bg-white/90 backdrop-blur-sm border border-gray-200 text-primary flex items-center justify-center hover:bg-cuba-red hover:text-white hover:border-cuba-red transition-colors">
-        <span class="material-symbols-outlined text-xl">favorite</span>
+      <button
+        class="size-10 bg-white/90 backdrop-blur-sm border border-gray-200 text-primary flex items-center justify-center hover:bg-cuba-red hover:text-white hover:border-cuba-red transition-colors"
+      >
+        <Icon name="heart" size={20} />
       </button>
     </div>
   </div>
@@ -70,7 +80,9 @@ const {
     <div class="flex items-start justify-between mb-4">
       <h3 class="font-serif font-bold text-2xl italic leading-tight">{title}</h3>
       <div class="postal-stamp rotate-2">
-        <span class="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1">
+        <span
+          class="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1"
+        >
           Zona Postal
         </span>
         <span class="text-sm">{location}, {locationDistrict}</span>
@@ -91,11 +103,11 @@ const {
           <span class="text-lg font-serif italic">{area}</span>
         </div>
       </div>
-      <a 
-        class="text-sm font-bold uppercase tracking-widest text-sea-glass flex items-center gap-2 hover:translate-x-1 transition-transform" 
+      <a
+        class="text-sm font-bold uppercase tracking-widest text-sea-glass flex items-center gap-2 hover:translate-x-1 transition-transform"
         href={`/propiedades/${slug}`}
       >
-        Detalles <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        Detalles <Icon name="arrow-right" size={14} />
       </a>
     </div>
   </div>

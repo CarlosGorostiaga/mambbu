@@ -1,5 +1,6 @@
 ---
 import PropertyCard from './PropertyCard.astro';
+import Icon from './Icon.astro';
 
 export interface Props {
   properties: Array<{
@@ -29,16 +30,17 @@ const { properties } = Astro.props;
       </span>
       <h3 class="font-serif text-5xl italic font-bold text-primary">Últimas Adiciones</h3>
     </div>
+
     <a
       class="text-[11px] font-bold uppercase tracking-wider border-b-2 border-primary pb-1 flex items-center gap-2 group hover:text-sea-glass hover:border-sea-glass transition-all"
       href="/propiedades"
     >
       Ver todas las propiedades
-      <span
-        class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform"
-      >
-        arrow_forward
-      </span>
+      <Icon
+        name="arrow-right"
+        class="text-sm group-hover:translate-x-1 transition-transform"
+        size={14}
+      />
     </a>
   </div>
 

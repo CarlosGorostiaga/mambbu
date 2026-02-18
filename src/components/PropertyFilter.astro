@@ -1,5 +1,6 @@
 ---
 import type { PropertyFilters } from '../types/property';
+import Icon from './Icon.astro';
 
 export interface Props {
   filters: PropertyFilters;
@@ -29,7 +30,7 @@ const hasActiveFilters =
     type="button"
     class="flex items-center gap-2 px-5 py-3 border-2 border-primary text-primary font-bold uppercase tracking-wider text-sm hover:bg-primary hover:text-white transition-all"
   >
-    <span class="material-symbols-outlined">tune</span>
+    <Icon name="sliders-horizontal" size={20} />
     Filtros
     {
       hasActiveFilters && (
@@ -46,7 +47,7 @@ const hasActiveFilters =
         href="/propiedades"
         class="text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-cuba-red transition-colors flex items-center gap-1"
       >
-        <span class="material-symbols-outlined text-sm">close</span>
+        <Icon name="x" size={16} />
         Limpiar filtros
       </a>
     )
@@ -76,7 +77,7 @@ const hasActiveFilters =
   >
     <h2 class="text-xl font-serif font-bold italic">Refinar Búsqueda</h2>
     <button id="close-filters" type="button" class="p-2 hover:text-cuba-red transition-colors">
-      <span class="material-symbols-outlined">close</span>
+      <Icon name="x" size={24} />
     </button>
   </div>
 
@@ -200,7 +201,7 @@ const hasActiveFilters =
       class="w-full bg-primary text-white font-serif italic text-lg py-4 px-6 hover:bg-sea-glass hover:text-primary transition-all shadow-lg flex items-center justify-center gap-2"
     >
       Aplicar Filtros
-      <span class="material-symbols-outlined text-sm">arrow_forward</span>
+      <Icon name="arrow-right" size={16} />
     </button>
   </form>
 </div>
@@ -232,18 +233,4 @@ const hasActiveFilters =
   openBtn?.addEventListener('click', openDrawer);
   closeBtn?.addEventListener('click', closeDrawer);
   overlay?.addEventListener('click', closeDrawer);
-
-  // Abrir automáticamente si hay filtros activos
-  const urlParams = new URLSearchParams(window.location.search);
-  const hasFilters =
-    urlParams.has('minPrice') ||
-    urlParams.has('maxPrice') ||
-    urlParams.has('type') ||
-    urlParams.has('location') ||
-    urlParams.has('bedrooms');
-
-  if (hasFilters) {
-    // (misma lógica: simplemente lo dejas preparado; aquí lo abrimos)
-    openDrawer();
-  }
 </script>

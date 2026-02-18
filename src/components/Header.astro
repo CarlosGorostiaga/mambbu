@@ -1,13 +1,15 @@
 ---
-// Header estático de Astro (sin interactividad)
+import Icon from './Icon.astro';
 ---
 
 <header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-100">
   <div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between gap-8">
     <div class="flex items-center gap-12">
       <a href="/" class="flex items-center gap-3">
-        <div class="size-10 bg-primary text-white flex items-center justify-center rounded-sm rotate-3">
-          <span class="material-symbols-outlined">waves</span>
+        <div
+          class="size-10 bg-primary text-white flex items-center justify-center rounded-sm rotate-3"
+        >
+          <Icon name="waves" size={24} />
         </div>
         <div class="flex flex-col">
           <h1 class="text-2xl font-serif font-bold tracking-tight text-primary">Mambbu</h1>
@@ -15,31 +17,37 @@
         </div>
       </a>
       <nav class="hidden lg:flex items-center gap-8">
-        <a class="text-sm font-semibold hover:text-sea-glass transition-colors uppercase tracking-wider" href="/comprar">
-          Comprar
-        </a>
-        <a class="text-sm font-semibold hover:text-sea-glass transition-colors uppercase tracking-wider" href="/alquilar">
-          Alquilar
-        </a>
-        <a class="text-sm font-semibold hover:text-sea-glass transition-colors uppercase tracking-wider" href="/publicar">
-          Publicar
-        </a>
+        <a
+          class="text-sm font-semibold hover:text-sea-glass transition-colors uppercase tracking-wider"
+          href="/propiedades">Comprar</a
+        >
+        <a
+          class="text-sm font-semibold hover:text-sea-glass transition-colors uppercase tracking-wider"
+          href="/propiedades">Alquilar</a
+        >
+        <a
+          class="text-sm font-semibold hover:text-sea-glass transition-colors uppercase tracking-wider"
+          href="#">Publicar</a
+        >
       </nav>
     </div>
-    
+
     <div class="flex items-center gap-4">
-      <button class="hidden md:block text-sm font-bold uppercase tracking-wider border-b-2 border-primary pb-1 hover:text-sea-glass hover:border-sea-glass transition-all">
+      <button
+        class="hidden md:block text-sm font-bold uppercase tracking-wider border-b-2 border-primary pb-1 hover:text-sea-glass hover:border-sea-glass transition-all"
+      >
         Para Agencias
       </button>
       <button class="p-2 text-primary hover:text-cuba-red transition-colors">
-        <span class="material-symbols-outlined">favorite</span>
+        <Icon name="heart" size={24} />
       </button>
       <div class="size-10 rounded-full overflow-hidden border-2 border-sea-glass p-0.5">
-        <div class="w-full h-full bg-sea-glass/20 rounded-full flex items-center justify-center">
-          <span class="material-symbols-outlined text-primary">person</span>
-        </div>
+        <img
+          class="w-full h-full object-cover rounded-full"
+          src="/images/team.jpg"
+          alt="User avatar"
+        />
       </div>
     </div>
   </div>
-  <div class="wave-divider"></div>
 </header>

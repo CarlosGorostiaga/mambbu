@@ -6,6 +6,7 @@ import PropertyGallery from '../../components/PropertyGallery.astro';
 import PropertyInfo from '../../components/PropertyInfo.astro';
 import PropertyAgent from '../../components/PropertyAgent.astro';
 import PropertySimilar from '../../components/PropertySimilar.astro';
+import Icon from '../../components/Icon.astro';
 import { getPropertyBySlug, properties } from '../../data/properties';
 
 // SSR dinámico - sin prerender
@@ -39,9 +40,9 @@ const similarProperties = property.similarProperties
       <span class="mx-2">/</span>
       <a class="hover:text-sea-glass" href="/propiedades">Propiedades</a>
       <span class="mx-2">/</span>
-      <a class="hover:text-sea-glass" href={`/barrios/${property.location.toLowerCase()}`}
-        >{property.location}</a
-      >
+      <a class="hover:text-sea-glass" href={`/barrios/${property.location.toLowerCase()}`}>
+        {property.location}
+      </a>
       <span class="mx-2">/</span>
       <span class="text-primary">{property.title}</span>
     </nav>
@@ -51,23 +52,23 @@ const similarProperties = property.similarProperties
       <div class="flex-1">
         <h1 class="text-5xl font-serif font-bold italic leading-tight mb-3">{property.title}</h1>
         <div class="flex items-center gap-2 text-gray-500 text-sm">
-          <span class="material-symbols-outlined text-sm">location_on</span>
-          <span class="font-serif italic"
-            >{property.location}, {property.locationDistrict}, La Habana</span
-          >
+          <Icon name="map-pin" size={16} />
+          <span class="font-serif italic">
+            {property.location}, {property.locationDistrict}, La Habana
+          </span>
         </div>
       </div>
       <div class="flex gap-3">
         <button
           class="flex items-center gap-2 px-5 py-3 border border-gray-200 hover:border-sea-glass text-sm font-bold uppercase tracking-wider transition-colors"
         >
-          <span class="material-symbols-outlined text-lg">share</span>
+          <Icon name="share" size={20} />
           Compartir
         </button>
         <button
           class="flex items-center gap-2 px-5 py-3 border border-gray-200 hover:border-cuba-red hover:text-cuba-red text-sm font-bold uppercase tracking-wider transition-colors"
         >
-          <span class="material-symbols-outlined text-lg">favorite</span>
+          <Icon name="heart" size={20} />
           Guardar
         </button>
       </div>

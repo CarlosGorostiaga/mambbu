@@ -1,4 +1,6 @@
 ---
+import Icon from './Icon.astro';
+
 export interface Props {
   title: string;
   location: string;
@@ -14,39 +16,38 @@ export interface Props {
   newListing?: boolean;
 }
 
-const { 
-  title, 
-  location, 
-  locationDistrict, 
-  price, 
-  bedrooms, 
-  bathrooms, 
-  area, 
+const {
+  title,
+  location,
+  locationDistrict,
+  price,
+  bedrooms,
+  bathrooms,
+  area,
   yearBuilt,
   description,
   amenities,
   featured,
-  newListing
+  newListing,
 } = Astro.props;
 ---
 
 <div class="flex-1 max-w-3xl">
-  
   <!-- Badges y título -->
   <div class="mb-8">
     <div class="flex items-center gap-3 mb-3">
-      {featured && (
-        <span class="cuba-badge">★ Anuncio Destacado</span>
-      )}
-      {newListing && (
-        <span class="bg-sea-glass text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest">
-          Nuevo Ingreso
-        </span>
-      )}
+      {featured && <span class="cuba-badge">★ Anuncio Destacado</span>}
+      {
+        newListing && (
+          <span class="bg-sea-glass text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest">
+            Nuevo Ingreso
+          </span>
+        )
+      }
     </div>
     <h2 class="text-5xl font-serif font-bold italic leading-tight mb-3">{title}</h2>
     <div class="flex items-center gap-2 text-gray-500 text-sm">
-      <span class="material-symbols-outlined text-sm">location_on</span>
+      <Icon name="map-pin" size={16} />
       <span class="font-serif italic">{location}, {locationDistrict}, La Habana</span>
     </div>
   </div>
@@ -55,40 +56,45 @@ const {
   <section class="grid grid-cols-2 md:grid-cols-5 gap-6 mb-12 py-8 border-y-2 border-sea-glass">
     <div class="text-center">
       <div class="postal-stamp inline-block rotate-2 mb-2">
-        <span class="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1">Precio</span>
+        <span
+          class="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1"
+          >Precio</span
+        >
         <span class="text-2xl font-bold">{price}</span>
       </div>
     </div>
     <div class="text-center">
       <span class="block text-[10px] uppercase font-bold text-gray-400 mb-2">Habitaciones</span>
       <div class="flex items-center justify-center gap-2">
-        <span class="material-symbols-outlined text-sea-glass text-2xl">bed</span>
+        <Icon name="bed" class="text-sea-glass" size={32} />
         <span class="text-3xl font-serif italic font-bold">{bedrooms}</span>
       </div>
     </div>
     <div class="text-center">
       <span class="block text-[10px] uppercase font-bold text-gray-400 mb-2">Baños</span>
       <div class="flex items-center justify-center gap-2">
-        <span class="material-symbols-outlined text-sea-glass text-2xl">bathtub</span>
+        <Icon name="bath" class="text-sea-glass" size={32} />
         <span class="text-3xl font-serif italic font-bold">{bathrooms}</span>
       </div>
     </div>
     <div class="text-center">
       <span class="block text-[10px] uppercase font-bold text-gray-400 mb-2">Área Total</span>
       <div class="flex items-center justify-center gap-2">
-        <span class="material-symbols-outlined text-sea-glass text-2xl">square_foot</span>
+        <Icon name="square-foot" class="text-sea-glass" size={32} />
         <span class="text-3xl font-serif italic font-bold">{area}</span>
       </div>
     </div>
-    {yearBuilt && (
-      <div class="text-center">
-        <span class="block text-[10px] uppercase font-bold text-gray-400 mb-2">Año</span>
-        <div class="flex items-center justify-center gap-2">
-          <span class="material-symbols-outlined text-sea-glass text-2xl">calendar_month</span>
-          <span class="text-3xl font-serif italic font-bold">{yearBuilt}</span>
+    {
+      yearBuilt && (
+        <div class="text-center">
+          <span class="block text-[10px] uppercase font-bold text-gray-400 mb-2">Año</span>
+          <div class="flex items-center justify-center gap-2">
+            <Icon name="calendar" class="text-sea-glass" size={32} />
+            <span class="text-3xl font-serif italic font-bold">{yearBuilt}</span>
+          </div>
         </div>
-      </div>
-    )}
+      )
+    }
   </section>
 
   <!-- Description -->
@@ -98,9 +104,7 @@ const {
       Una propiedad única en {location}
     </h3>
     <div class="space-y-4 text-lg leading-relaxed text-gray-700 font-serif italic">
-      {description.split('\n\n').map((paragraph) => (
-        <p>{paragraph.trim()}</p>
-      ))}
+      {description.split('\n\n').map((paragraph) => <p>{paragraph.trim()}</p>)}
     </div>
   </div>
 
@@ -108,12 +112,14 @@ const {
   <div class="mb-12 pb-12 border-b border-gray-100">
     <h4 class="text-xl font-bold uppercase tracking-widest mb-6">Características Principales</h4>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {amenities.map((amenity) => (
-        <div class="flex items-center gap-3 text-sm">
-          <span class="material-symbols-outlined text-sea-glass">check_circle</span>
-          <span>{amenity}</span>
-        </div>
-      ))}
+      {
+        amenities.map((amenity) => (
+          <div class="flex items-center gap-3 text-sm">
+            <Icon name="check-circle" class="text-sea-glass" size={20} />
+            <span>{amenity}</span>
+          </div>
+        ))
+      }
     </div>
   </div>
 
@@ -122,11 +128,17 @@ const {
     <h4 class="text-xl font-bold uppercase tracking-widest mb-6">Ubicación</h4>
     <div class="w-full aspect-video postcard-border tile-pattern overflow-hidden relative">
       <div class="absolute inset-0 flex items-center justify-center">
-        <div class="bg-white px-6 py-4 border-2 border-primary shadow-lg flex flex-col items-center gap-2">
-          <span class="material-symbols-outlined text-sea-glass text-5xl">location_on</span>
+        <div
+          class="bg-white px-6 py-4 border-2 border-primary shadow-lg flex flex-col items-center gap-2"
+        >
+          <Icon name="map-pin" class="text-sea-glass" size={48} />
           <div class="text-center">
-            <span class="block text-xs font-bold uppercase tracking-wider text-gray-400">Zona Postal</span>
-            <span class="block text-lg font-serif italic font-bold">{location}, {locationDistrict}</span>
+            <span class="block text-xs font-bold uppercase tracking-wider text-gray-400"
+              >Zona Postal</span
+            >
+            <span class="block text-lg font-serif italic font-bold"
+              >{location}, {locationDistrict}</span
+            >
             <span class="block text-sm text-gray-500">La Habana, Cuba</span>
           </div>
         </div>
@@ -134,22 +146,21 @@ const {
     </div>
     <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-sea-glass text-sm">directions_walk</span>
+        <Icon name="directions-walk" class="text-sea-glass" size={16} />
         <span>5ta Avenida - 2 min</span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-sea-glass text-sm">restaurant</span>
+        <Icon name="restaurant" class="text-sea-glass" size={16} />
         <span>Restaurantes - 5 min</span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-sea-glass text-sm">beach_access</span>
+        <Icon name="beach-access" class="text-sea-glass" size={16} />
         <span>Playa - 10 min</span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined text-sea-glass text-sm">local_hospital</span>
+        <Icon name="local-hospital" class="text-sea-glass" size={16} />
         <span>Hospital - 8 min</span>
       </div>
     </div>
   </div>
-
 </div>

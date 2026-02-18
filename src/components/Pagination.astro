@@ -1,4 +1,6 @@
 ---
+import Icon from './Icon.astro';
+
 export interface Props {
   currentPage: number;
   totalPages: number;
@@ -49,11 +51,11 @@ const buildUrl = (page: number) => {
         data-page={currentPage - 1}
         class="pagination-link size-12 flex items-center justify-center border border-gray-200 hover:border-sea-glass transition-colors"
       >
-        <span class="material-symbols-outlined">chevron_left</span>
+        <Icon name="chevron-left" size={24} />
       </a>
     ) : (
       <span class="size-12 flex items-center justify-center border border-gray-100 text-gray-300 cursor-not-allowed">
-        <span class="material-symbols-outlined">chevron_left</span>
+        <Icon name="chevron-left" size={24} />
       </span>
     )}
 
@@ -85,11 +87,11 @@ const buildUrl = (page: number) => {
         data-page={currentPage + 1}
         class="pagination-link size-12 flex items-center justify-center border border-gray-200 hover:border-sea-glass transition-colors"
       >
-        <span class="material-symbols-outlined">chevron_right</span>
+        <Icon name="chevron-right" size={24} />
       </a>
     ) : (
       <span class="size-12 flex items-center justify-center border border-gray-100 text-gray-300 cursor-not-allowed">
-        <span class="material-symbols-outlined">chevron_right</span>
+        <Icon name="chevron-right" size={24} />
       </span>
     )}
   </div>
@@ -106,19 +108,15 @@ const buildUrl = (page: number) => {
 
         const href = (link as HTMLAnchorElement).href;
 
-        // Guardar posición del grid
         const gridTop = grid?.getBoundingClientRect().top ?? 0;
-        const scrollY = window.scrollY + gridTop - 100; // 100px de margen
+        const scrollY = window.scrollY + gridTop - 100;
 
-        // Navegar a la nueva URL
         const response = await fetch(href);
         const html = await response.text();
 
-        // Parsear el HTML recibido
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
 
-        // Reemplazar solo el grid de propiedades
         const newGrid = doc.getElementById('properties-grid');
         const newPagination = doc.getElementById('pagination');
 
@@ -126,16 +124,13 @@ const buildUrl = (page: number) => {
           grid.innerHTML = newGrid.innerHTML;
         }
 
-        // Actualizar paginación
         const paginationEl = document.getElementById('pagination');
         if (newPagination && paginationEl) {
           paginationEl.outerHTML = newPagination.outerHTML;
         }
 
-        // Actualizar URL sin recargar
         history.pushState({}, '', href);
 
-        // Scroll a la posición del grid (no al top)
         window.scrollTo({ top: scrollY, behavior: 'instant' });
       });
     });
