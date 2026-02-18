@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Search } from 'lucide-react';
 
 interface SearchBoxProps {
   className?: string;
@@ -24,7 +25,7 @@ export default function SearchBox({ className = '' }: SearchBoxProps) {
             <label className="text-[9px] font-bold uppercase tracking-wider text-gray-400 mb-1">
               Ubicación
             </label>
-            <select 
+            <select
               className="border-0 p-0 text-sm font-semibold focus:ring-0 w-full bg-transparent"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
@@ -39,7 +40,7 @@ export default function SearchBox({ className = '' }: SearchBoxProps) {
             <label className="text-[9px] font-bold uppercase tracking-wider text-gray-400 mb-1">
               Tipo
             </label>
-            <select 
+            <select
               className="border-0 p-0 text-sm font-semibold focus:ring-0 w-full bg-transparent"
               value={propertyType}
               onChange={(e) => setPropertyType(e.target.value)}
@@ -54,7 +55,7 @@ export default function SearchBox({ className = '' }: SearchBoxProps) {
             <label className="text-[9px] font-bold uppercase tracking-wider text-gray-400 mb-1">
               Precio
             </label>
-            <select 
+            <select
               className="border-0 p-0 text-sm font-semibold focus:ring-0 w-full bg-transparent"
               value={priceRange}
               onChange={(e) => setPriceRange(e.target.value)}
@@ -69,7 +70,7 @@ export default function SearchBox({ className = '' }: SearchBoxProps) {
             <label className="text-[9px] font-bold uppercase tracking-wider text-gray-400 mb-1">
               Habitaciones
             </label>
-            <select 
+            <select
               className="border-0 p-0 text-sm font-semibold focus:ring-0 w-full bg-transparent"
               value={bedrooms}
               onChange={(e) => setBedrooms(e.target.value)}
@@ -82,11 +83,11 @@ export default function SearchBox({ className = '' }: SearchBoxProps) {
             </select>
           </div>
         </div>
-        <button 
+        <button
           type="submit"
           className="bg-primary text-white px-10 py-5 font-bold uppercase tracking-wider text-xs hover:bg-sea-glass hover:text-primary transition-all flex items-center justify-center gap-2"
         >
-          <span className="material-symbols-outlined text-base">search</span>
+          <Search size={16} />
           Buscar
         </button>
       </form>
