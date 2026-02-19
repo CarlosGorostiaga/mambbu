@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Image {
@@ -13,16 +13,22 @@ interface PropertyCardSliderProps {
 
 export default function PropertyCardSlider({ images, title }: PropertyCardSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
-  const goToPrevious = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const goToPrevious = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
-  const goToNext = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const goToNext = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
@@ -30,6 +36,35 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
     e.preventDefault();
     e.stopPropagation();
     setCurrentIndex(index);
+  };
+
+  // Touch handlers para swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      goToNext();
+    }
+    if (isRightSwipe) {
+      goToPrevious();
+    }
+
+    // Reset
+    setTouchStart(0);
+    setTouchEnd(0);
   };
 
   if (images.length === 0) {
@@ -41,7 +76,12 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
   }
 
   return (
-    <div className="relative w-full h-full group">
+    <div 
+      className="relative w-full h-full group"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* Imagen actual */}
       <img
         src={images[currentIndex].url}
@@ -56,15 +96,15 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
         <>
           <button
             onClick={goToPrevious}
-            className="absolute left-2 top-1/2 -translate-y-1/2 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white shadow-lg"
+            className="absolute left-2 top-1/2 -translate-y-1/2 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-white shadow-lg"
             aria-label="Imagen anterior"
           >
             <ChevronLeft size={20} className="text-primary" />
           </button>
-
+          
           <button
             onClick={goToNext}
-            className="absolute right-2 top-1/2 -translate-y-1/2 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white shadow-lg"
+            className="absolute right-2 top-1/2 -translate-y-1/2 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-white shadow-lg"
             aria-label="Siguiente imagen"
           >
             <ChevronRight size={20} className="text-primary" />
@@ -77,7 +117,9 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
                 key={index}
                 onClick={(e) => goToSlide(index, e)}
                 className={`size-2 rounded-full transition-all ${
-                  index === currentIndex ? 'bg-white w-6' : 'bg-white/60 hover:bg-white/80'
+                  index === currentIndex
+                    ? 'bg-white w-6'
+                    : 'bg-white/60 hover:bg-white/80'
                 }`}
                 aria-label={`Ir a imagen ${index + 1}`}
               />
