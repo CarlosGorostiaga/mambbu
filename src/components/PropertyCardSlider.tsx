@@ -40,16 +40,22 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
   };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    // Solo swipe táctil
+    if (e.pointerType !== 'touch') return;
+
     isPointerDown.current = true;
     startX.current = e.clientX;
+
+    // Captura el pointer aunque el dedo pase por overlays
     e.currentTarget.setPointerCapture(e.pointerId);
   };
 
   const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== 'touch') return;
     if (!isPointerDown.current || startX.current === null) return;
 
     const diff = startX.current - e.clientX;
-    const threshold = 40; // Sensibilidad del swipe
+    const threshold = 35;
 
     if (Math.abs(diff) > threshold) {
       if (diff > 0) goToNext();
@@ -70,7 +76,7 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
 
   return (
     <div
-      className="relative w-full h-full group select-none touch-pan-y"
+      className="relative w-full h-full group select-none"
       style={{ touchAction: 'pan-y' }}
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
@@ -79,8 +85,10 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
       <img
         src={images[currentIndex].url}
         alt={images[currentIndex].alt || title}
-        className="w-full h-full object-cover pointer-events-none"
+        className="w-full h-full object-cover pointer-events-none select-none"
         draggable={false}
+        loading="lazy"
+        decoding="async"
       />
 
       {images.length > 1 && (
@@ -110,8 +118,9 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
                 type="button"
                 onClick={(e) => goToSlide(index, e)}
                 className={`size-2 rounded-full transition-all ${
-                  index === currentIndex ? 'bg-white w-6' : 'bg-white/60'
+                  index === currentIndex ? 'bg-white w-6' : 'bg-white/60 hover:bg-white/80'
                 }`}
+                aria-label={`Ir a imagen ${index + 1}`}
               />
             ))}
           </div>

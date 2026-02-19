@@ -43,6 +43,7 @@ const imageArray = images || [{ url: image, alt: title }];
   <div class="relative h-80 overflow-hidden border-b border-gray-100">
     <PropertyCardSlider images={imageArray} title={title} client:visible />
 
+    <!-- overlays: no bloquean el swipe -->
     <div class="absolute top-6 left-6 z-10 flex flex-col gap-2 pointer-events-none">
       {featured && <span class="cuba-badge">★ Anuncio Destacado</span>}
       {verified && (
@@ -88,9 +89,7 @@ const imageArray = images || [{ url: image, alt: title }];
         <span class="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1">
           Zona Postal
         </span>
-        <span class="text-sm">
-          {location}, {locationDistrict}
-        </span>
+        <span class="text-sm">{location}, {locationDistrict}</span>
       </div>
     </div>
 
@@ -114,8 +113,7 @@ const imageArray = images || [{ url: image, alt: title }];
         href={`/propiedades/${slug}`}
         class="text-sm font-bold uppercase tracking-widest text-sea-glass flex items-center gap-2 hover:translate-x-1 transition-transform"
       >
-        Detalles
-        <Icon name="arrow-right" size={14} />
+        Detalles <Icon name="arrow-right" size={14} />
       </a>
     </div>
   </div>
