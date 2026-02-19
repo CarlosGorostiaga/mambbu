@@ -15,10 +15,9 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const startX = useRef<number | null>(null);
-  const currentX = useRef<number | null>(null);
   const isPointerDown = useRef(false);
 
-  const goToPrevious = (e?: React.MouseEvent) => {
+  const goToPrevious = (e?: React.MouseEvent | React.PointerEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -26,7 +25,7 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
-  const goToNext = (e?: React.MouseEvent) => {
+  const goToNext = (e?: React.MouseEvent | React.PointerEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -40,44 +39,25 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
     setCurrentIndex(index);
   };
 
-  // Pointer swipe (mejor que touch en iOS)
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    // Solo gestos “touch”
-    if (e.pointerType !== 'touch') return;
-
     isPointerDown.current = true;
     startX.current = e.clientX;
-    currentX.current = e.clientX;
-
-    // Captura el gesto aunque el dedo pase por encima de otros hijos
     e.currentTarget.setPointerCapture(e.pointerId);
   };
 
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isPointerDown.current) return;
-    if (e.pointerType !== 'touch') return;
-
-    currentX.current = e.clientX;
-  };
-
   const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isPointerDown.current) return;
-    if (e.pointerType !== 'touch') return;
+    if (!isPointerDown.current || startX.current === null) return;
 
-    const sx = startX.current;
-    const cx = currentX.current;
+    const diff = startX.current - e.clientX;
+    const threshold = 40; // Sensibilidad del swipe
+
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) goToNext();
+      else goToPrevious();
+    }
 
     isPointerDown.current = false;
     startX.current = null;
-    currentX.current = null;
-
-    if (sx == null || cx == null) return;
-
-    const distance = sx - cx;
-    const threshold = 35; // más sensible
-
-    if (distance > threshold) goToNext();
-    else if (distance < -threshold) goToPrevious();
   };
 
   if (!images || images.length === 0) {
@@ -90,34 +70,26 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
 
   return (
     <div
-      className="relative w-full h-full group"
-      style={{
-        touchAction: 'pan-y', // IMPORTANTÍSIMO: permite scroll vertical y gesto horizontal
-        WebkitUserSelect: 'none',
-        userSelect: 'none',
-      }}
+      className="relative w-full h-full group select-none touch-pan-y"
+      style={{ touchAction: 'pan-y' }}
       onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
       <img
         src={images[currentIndex].url}
         alt={images[currentIndex].alt || title}
-        className="w-full h-full object-cover select-none"
-        loading="lazy"
-        decoding="async"
+        className="w-full h-full object-cover pointer-events-none"
         draggable={false}
       />
 
       {images.length > 1 && (
         <>
-          {/* Flechas */}
           <button
             type="button"
             onClick={goToPrevious}
-            className="absolute left-2 top-1/2 -translate-y-1/2 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-white shadow-lg"
-            aria-label="Imagen anterior"
+            className="absolute left-2 top-1/2 -translate-y-1/2 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-white shadow-lg z-20"
+            aria-label="Anterior"
           >
             <ChevronLeft size={20} className="text-primary" />
           </button>
@@ -125,29 +97,26 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
           <button
             type="button"
             onClick={goToNext}
-            className="absolute right-2 top-1/2 -translate-y-1/2 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-white shadow-lg"
-            aria-label="Siguiente imagen"
+            className="absolute right-2 top-1/2 -translate-y-1/2 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-white shadow-lg z-20"
+            aria-label="Siguiente"
           >
             <ChevronRight size={20} className="text-primary" />
           </button>
 
-          {/* Dots */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
             {images.map((_, index) => (
               <button
                 key={index}
                 type="button"
                 onClick={(e) => goToSlide(index, e)}
                 className={`size-2 rounded-full transition-all ${
-                  index === currentIndex ? 'bg-white w-6' : 'bg-white/60 hover:bg-white/80'
+                  index === currentIndex ? 'bg-white w-6' : 'bg-white/60'
                 }`}
-                aria-label={`Ir a imagen ${index + 1}`}
               />
             ))}
           </div>
 
-          {/* Contador */}
-          <div className="absolute top-4 right-4 bg-black/60 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
+          <div className="absolute top-4 right-4 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-sm z-20">
             {currentIndex + 1} / {images.length}
           </div>
         </>

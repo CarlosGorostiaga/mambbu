@@ -41,55 +41,40 @@ const imageArray = images || [{ url: image, alt: title }];
 
 <div class="bg-white postcard-border group flex flex-col h-full relative overflow-hidden">
   <div class="relative h-80 overflow-hidden border-b border-gray-100">
-    <!-- Slider de imágenes -->
     <PropertyCardSlider images={imageArray} title={title} client:visible />
 
-    <div class="absolute top-6 left-6 z-10 flex flex-col gap-2">
+    <div class="absolute top-6 left-6 z-10 flex flex-col gap-2 pointer-events-none">
       {featured && <span class="cuba-badge">★ Anuncio Destacado</span>}
+      {verified && (
+        <div class="verified-stamp">
+          <Icon name="verified" class="text-xs mr-1" size={12} />
+          Agencia<br />Verificada
+        </div>
+      )}
     </div>
 
-    {
-      verified && (
-        <div class="absolute top-6 left-6 z-10">
-          <div class="verified-stamp">
-            <Icon name="verified" class="text-xs mr-1" size={12} />
-            Agencia
-            <br />
-            Verificada
-          </div>
-        </div>
-      )
-    }
-
-    <div
-      class="absolute top-6 right-0 bg-primary text-white py-2 px-6 font-serif italic text-xl ticket-cut shadow-xl z-10"
-    >
+    <div class="absolute top-6 right-0 bg-primary text-white py-2 px-6 font-serif italic text-xl ticket-cut shadow-xl z-10 pointer-events-none">
       {price}
     </div>
 
-    <div class="absolute bottom-4 left-4 z-10 flex flex-col gap-2">
-      {
-        newListing && (
-          <span class="bg-sea-glass text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest">
-            Nuevo Ingreso
-          </span>
-        )
-      }
-
-      {
-        quickResponse && (
-          <span class="bg-amber-500 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1">
-            <Icon name="verified" size={12} />
-            Respuesta Rápida
-          </span>
-        )
-      }
+    <div class="absolute bottom-4 left-4 z-10 flex flex-col gap-2 pointer-events-none">
+      {newListing && (
+        <span class="bg-sea-glass text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest">
+          Nuevo Ingreso
+        </span>
+      )}
+      {quickResponse && (
+        <span class="bg-amber-500 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1">
+          <Icon name="verified" size={12} />
+          Respuesta Rápida
+        </span>
+      )}
     </div>
 
-    <div class="absolute bottom-4 right-4 z-10 flex gap-2">
+    <div class="absolute bottom-4 right-4 z-10 flex gap-2 pointer-events-none">
       <button
         type="button"
-        class="size-10 bg-white/90 backdrop-blur-sm border border-gray-200 text-primary flex items-center justify-center hover:bg-cuba-red hover:text-white hover:border-cuba-red transition-colors"
+        class="pointer-events-auto size-10 bg-white/90 backdrop-blur-sm border border-gray-200 text-primary flex items-center justify-center hover:bg-cuba-red hover:text-white hover:border-cuba-red transition-colors"
       >
         <Icon name="heart" size={20} />
       </button>
@@ -100,9 +85,7 @@ const imageArray = images || [{ url: image, alt: title }];
     <div class="flex items-start justify-between mb-4">
       <h3 class="font-serif font-bold text-2xl italic leading-tight">{title}</h3>
       <div class="postal-stamp rotate-2">
-        <span
-          class="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1"
-        >
+        <span class="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1">
           Zona Postal
         </span>
         <span class="text-sm">
