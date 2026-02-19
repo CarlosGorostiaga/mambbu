@@ -7,7 +7,7 @@ import PropertyInfo from '../../components/PropertyInfo.astro';
 import PropertyAgent from '../../components/PropertyAgent.astro';
 import PropertySimilar from '../../components/PropertySimilar.astro';
 import Icon from '../../components/Icon.astro';
-import { getPropertyBySlug, properties } from '../../data/properties';
+import { fetchPropertyBySlug, fetchProperties } from '../../lib/api';
 
 // SSR dinámico - sin prerender
 export const prerender = false;
@@ -18,16 +18,22 @@ if (!slug) {
   return Astro.rewrite('/404');
 }
 
-const property = getPropertyBySlug(slug);
+// Obtener propiedad desde la API
+const propertyResponse = await fetchPropertyBySlug(slug);
 
-if (!property) {
+if (!propertyResponse.success) {
   return Astro.rewrite('/404');
 }
 
-// Obtener propiedades similares
-const similarProperties = property.similarProperties
-  ? properties.filter((p) => property.similarProperties?.includes(p.slug))
-  : properties.filter((p) => p.id !== property.id && p.location === property.location).slice(0, 3);
+const property = propertyResponse.data;
+
+// Obtener propiedades similares (misma ubicación, excluir actual)
+const similarResponse = await fetchProperties({
+  location: property.location,
+  perPage: 4,
+});
+
+const similarProperties = similarResponse.data.filter((p: any) => p.id !== property.id).slice(0, 3);
 ---
 
 <BaseLayout title={`${property.title} - ${property.location} | Mambbu`}>

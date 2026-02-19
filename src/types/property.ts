@@ -57,6 +57,7 @@ export interface PropertyFilters {
   bedrooms?: number;
   sortBy?: SortOption;
   page?: number;
+  perPage?: number; // ← AÑADIR ESTA LÍNEA
 }
 
 export type SortOption = 'newest' | 'price-asc' | 'price-desc' | 'relevance';

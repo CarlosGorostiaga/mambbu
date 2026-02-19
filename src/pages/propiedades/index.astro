@@ -6,7 +6,7 @@ import PropertyCard from '../../components/PropertyCard.astro';
 import PropertyFilter from '../../components/PropertyFilter.astro';
 import Pagination from '../../components/Pagination.astro';
 import Icon from '../../components/Icon.astro';
-import { getFilteredProperties } from '../../data/properties';
+import { fetchProperties } from '../../lib/api';
 import type { PropertyFilters, SortOption } from '../../types/property';
 
 export const prerender = false;
@@ -22,12 +22,14 @@ const filters: PropertyFilters = {
   bedrooms: params.get('bedrooms') ? Number(params.get('bedrooms')) : undefined,
   sortBy: (params.get('sortBy') as SortOption) || 'newest',
   page: params.get('page') ? Number(params.get('page')) : 1,
+  perPage: 6,
 };
 
-const { properties, total, totalPages } = getFilteredProperties({
-  ...filters,
-  perPage: 6,
-});
+// Llamar a la API - Prisma ya devuelve JSON parseado
+const apiResponse = await fetchProperties(filters);
+const properties = apiResponse.data;
+const total = apiResponse.total;
+const totalPages = apiResponse.totalPages;
 
 const baseParams = new URLSearchParams(params);
 baseParams.delete('page');
@@ -91,7 +93,7 @@ const baseUrl = `/propiedades${baseParams.toString() ? '?' + baseParams.toString
     {
       properties.length > 0 ? (
         <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-8">
-          {properties.map((property) => (
+          {properties.map((property: any) => (
             <div class={property.status === 'sold' ? 'opacity-75' : ''}>
               {property.status === 'sold' ? (
                 <div class="bg-white postcard-border flex flex-col h-full relative overflow-hidden">
@@ -147,9 +149,11 @@ const baseUrl = `/propiedades${baseParams.toString() ? '?' + baseParams.toString
                   bathrooms={property.bathrooms}
                   area={property.area}
                   image={property.images[0].url}
+                  images={property.images}
                   featured={property.featured}
                   newListing={property.newListing}
                   verified={property.verified}
+                  quickResponse={property.quickResponse}
                   slug={property.slug}
                 />
               )}
