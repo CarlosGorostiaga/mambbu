@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Image {
@@ -14,9 +14,9 @@ interface PropertyCardSliderProps {
 export default function PropertyCardSlider({ images, title }: PropertyCardSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Refs para swipe (evita el lag del state)
-  const touchStartX = useRef<number | null>(null);
-  const touchEndX = useRef<number | null>(null);
+  const startX = useRef<number | null>(null);
+  const currentX = useRef<number | null>(null);
+  const isPointerDown = useRef(false);
 
   const goToPrevious = (e?: React.MouseEvent) => {
     if (e) {
@@ -40,32 +40,44 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
     setCurrentIndex(index);
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const x = e.targetTouches[0]?.clientX ?? 0;
-    touchStartX.current = x;
-    touchEndX.current = x; // importante: inicializa end
+  // Pointer swipe (mejor que touch en iOS)
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    // Solo gestos “touch”
+    if (e.pointerType !== 'touch') return;
+
+    isPointerDown.current = true;
+    startX.current = e.clientX;
+    currentX.current = e.clientX;
+
+    // Captura el gesto aunque el dedo pase por encima de otros hijos
+    e.currentTarget.setPointerCapture(e.pointerId);
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.targetTouches[0]?.clientX ?? touchEndX.current;
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isPointerDown.current) return;
+    if (e.pointerType !== 'touch') return;
+
+    currentX.current = e.clientX;
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    e.stopPropagation();
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isPointerDown.current) return;
+    if (e.pointerType !== 'touch') return;
 
-    const start = touchStartX.current;
-    const end = touchEndX.current;
+    const sx = startX.current;
+    const cx = currentX.current;
 
-    if (start == null || end == null) return;
+    isPointerDown.current = false;
+    startX.current = null;
+    currentX.current = null;
 
-    const distance = start - end;
-    const threshold = 40; // un pelín más sensible que 50
+    if (sx == null || cx == null) return;
 
-    if (distance > threshold) goToNext();       // swipe izquierda
-    else if (distance < -threshold) goToPrevious(); // swipe derecha
+    const distance = sx - cx;
+    const threshold = 35; // más sensible
 
-    touchStartX.current = null;
-    touchEndX.current = null;
+    if (distance > threshold) goToNext();
+    else if (distance < -threshold) goToPrevious();
   };
 
   if (!images || images.length === 0) {
@@ -78,10 +90,16 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
 
   return (
     <div
-      className="relative w-full h-full group touch-pan-y"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      className="relative w-full h-full group"
+      style={{
+        touchAction: 'pan-y', // IMPORTANTÍSIMO: permite scroll vertical y gesto horizontal
+        WebkitUserSelect: 'none',
+        userSelect: 'none',
+      }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
     >
       <img
         src={images[currentIndex].url}
@@ -94,6 +112,7 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
 
       {images.length > 1 && (
         <>
+          {/* Flechas */}
           <button
             type="button"
             onClick={goToPrevious}
@@ -112,6 +131,7 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
             <ChevronRight size={20} className="text-primary" />
           </button>
 
+          {/* Dots */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
             {images.map((_, index) => (
               <button
@@ -126,6 +146,7 @@ export default function PropertyCardSlider({ images, title }: PropertyCardSlider
             ))}
           </div>
 
+          {/* Contador */}
           <div className="absolute top-4 right-4 bg-black/60 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
             {currentIndex + 1} / {images.length}
           </div>
