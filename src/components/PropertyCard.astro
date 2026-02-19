@@ -41,7 +41,7 @@ const imageArray = images || [{ url: image, alt: title }];
 
 <div class="bg-white postcard-border group flex flex-col h-full relative overflow-hidden">
   <div class="relative h-80 overflow-hidden border-b border-gray-100">
-    <PropertyCardSlider images={imageArray} title={title} client:visible />
+    <PropertyCardSlider images={imageArray} title={title} client:load />
 
     <!-- overlays: no bloquean el swipe -->
     <div class="absolute top-6 left-6 z-10 flex flex-col gap-2 pointer-events-none">
