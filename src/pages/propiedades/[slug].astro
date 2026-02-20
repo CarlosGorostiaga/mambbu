@@ -60,7 +60,7 @@ const similarProperties = similarResponse.data.filter((p: any) => p.id !== prope
         <div class="flex items-center gap-2 text-gray-500 text-sm">
           <Icon name="map-pin" size={16} />
           <span class="font-serif italic">
-            {property.location}, {property.locationDistrict}, La Habana
+            {property.address ? property.address : `${property.location}, ${property.locationDistrict}, La Habana`}
           </span>
         </div>
       </div>
@@ -90,6 +90,7 @@ const similarProperties = similarResponse.data.filter((p: any) => p.id !== prope
         title={property.title}
         location={property.location}
         locationDistrict={property.locationDistrict}
+        address={property.address}
         price={property.price}
         bedrooms={property.bedrooms}
         bathrooms={property.bathrooms}
