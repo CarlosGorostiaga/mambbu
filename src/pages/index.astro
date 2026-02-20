@@ -1,6 +1,6 @@
 ---
 export const prerender = true;
-export const revalidate = 900; // ISR cada hora
+export const revalidate = 900; // 15 minutos
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
@@ -43,24 +43,24 @@ const neighborhoods = [
     <Hero />
 
     <!-- Propiedades Destacadas -->
-    {
-      featuredProperties.length > 0 && (
-        <section class="max-w-[1440px] mx-auto px-6 py-24">
-          <div class="flex items-end justify-between mb-12">
-            <div>
-              <span class="text-sea-glass font-bold text-[11px] uppercase tracking-[0.3em] mb-4 block">
-                Propiedades Premium
-              </span>
-              <h2 class="font-serif text-5xl italic font-bold text-primary">
-                Propiedades Destacadas
-              </h2>
-            </div>
+    {featuredProperties.length > 0 && (
+      <section class="max-w-[1440px] mx-auto px-6 py-16 md:py-24">
+        <div class="mb-8 md:mb-12">
+          <span class="text-sea-glass font-bold text-[11px] uppercase tracking-[0.3em] mb-3 md:mb-4 block">
+            Propiedades Premium
+          </span>
+
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <h2 class="font-serif text-3xl md:text-5xl italic font-bold text-primary leading-tight">
+              Propiedades Destacadas
+            </h2>
 
             <a
-              class="text-[11px] font-bold uppercase tracking-wider border-b-2 border-primary pb-1 flex items-center gap-2 group hover:text-sea-glass hover:border-sea-glass transition-all"
+              class="text-[11px] font-bold uppercase tracking-wider border-b-2 border-primary pb-1 flex items-center gap-2 group hover:text-sea-glass hover:border-sea-glass transition-all self-start md:self-auto whitespace-nowrap"
               href="/propiedades?featured=true"
             >
-              Ver todas las destacadas
+              <span class="hidden sm:inline">Ver todas las destacadas</span>
+              <span class="sm:hidden">Ver todas</span>
               <Icon
                 name="arrow-right"
                 size={14}
@@ -68,29 +68,31 @@ const neighborhoods = [
               />
             </a>
           </div>
+        </div>
 
-          <PropertyCarousel properties={featuredProperties} client:visible />
-        </section>
-      )
-    }
+        <PropertyCarousel properties={featuredProperties} client:visible />
+      </section>
+    )}
 
     <!-- Últimas Adiciones -->
-    {
-      latestProperties.length > 0 && (
-        <section class="max-w-[1440px] mx-auto px-6 py-24 bg-cream">
-          <div class="flex items-end justify-between mb-12">
-            <div>
-              <span class="text-sea-glass font-bold text-[11px] uppercase tracking-[0.3em] mb-4 block">
-                Recién Publicadas
-              </span>
-              <h2 class="font-serif text-5xl italic font-bold text-primary">Últimas Adiciones</h2>
-            </div>
+    {latestProperties.length > 0 && (
+      <section class="max-w-[1440px] mx-auto px-6 py-16 md:py-24 bg-cream">
+        <div class="mb-8 md:mb-12">
+          <span class="text-sea-glass font-bold text-[11px] uppercase tracking-[0.3em] mb-3 md:mb-4 block">
+            Recién Publicadas
+          </span>
+
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <h2 class="font-serif text-3xl md:text-5xl italic font-bold text-primary leading-tight">
+              Últimas Adiciones
+            </h2>
 
             <a
-              class="text-[11px] font-bold uppercase tracking-wider border-b-2 border-primary pb-1 flex items-center gap-2 group hover:text-sea-glass hover:border-sea-glass transition-all"
+              class="text-[11px] font-bold uppercase tracking-wider border-b-2 border-primary pb-1 flex items-center gap-2 group hover:text-sea-glass hover:border-sea-glass transition-all self-start md:self-auto whitespace-nowrap"
               href="/propiedades"
             >
-              Ver todas las propiedades
+              <span class="hidden sm:inline">Ver todas las propiedades</span>
+              <span class="sm:hidden">Ver todas</span>
               <Icon
                 name="arrow-right"
                 size={14}
@@ -98,11 +100,11 @@ const neighborhoods = [
               />
             </a>
           </div>
+        </div>
 
-          <PropertyCarousel properties={latestProperties} client:visible />
-        </section>
-      )
-    }
+        <PropertyCarousel properties={latestProperties} client:visible />
+      </section>
+    )}
 
     <Stats />
     <About />
