@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 
 interface Property {
   id: string;
@@ -186,7 +186,14 @@ export default function PropertyCarousel({ properties }: PropertyCarouselProps) 
         return;
       }
 
-      if (startX.current == null || lastX.current == null) return;
+      if (startX.current == null || lastX.current == null) {
+        isSwiping.current = false;
+        startX.current = null;
+        startY.current = null;
+        lastX.current = null;
+        return;
+      }
+
       const dx = lastX.current - startX.current;
 
       if (dx < -threshold) scrollRight();
@@ -303,13 +310,11 @@ export default function PropertyCarousel({ properties }: PropertyCarouselProps) 
                     {property.title}
                   </h3>
 
-                  <div className="postal-stamp rotate-2 inline-block mb-4">
-                    <span className="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1">
-                      {property.address ? 'Dirección' : 'Zona'}
-                    </span>
-                    <span className="text-sm">
-                      {property.address ||
-                        `${property.location}, ${property.locationDistrict}`}
+                  {/* Dirección limpia con icono */}
+                  <div className="flex items-start gap-2 text-gray-600 text-sm mb-4">
+                    <MapPin size={16} className="mt-0.5 flex-shrink-0 text-sea-glass" />
+                    <span className="font-serif italic leading-snug">
+                      {property.address || `${property.location}, ${property.locationDistrict}`}
                     </span>
                   </div>
 
@@ -354,9 +359,7 @@ export default function PropertyCarousel({ properties }: PropertyCarouselProps) 
                 key={i}
                 type="button"
                 onClick={() => scrollToIndex(i * visibleCards)}
-                className={`size-2 rounded-full transition-all ${
-                  isActive ? 'bg-primary w-6' : 'bg-gray-300'
-                }`}
+                className={`size-2 rounded-full transition-all ${isActive ? 'bg-primary w-6' : 'bg-gray-300'}`}
                 aria-label={`Ir a grupo ${i + 1}`}
               />
             );

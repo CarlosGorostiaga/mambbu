@@ -6,7 +6,7 @@ export interface Props {
   title: string;
   location: string;
   locationDistrict: string;
-  address?: string; // ← AÑADIR
+  address?: string;
   price: string;
   bedrooms: number;
   bathrooms: number;
@@ -24,7 +24,7 @@ const {
   title,
   location,
   locationDistrict,
-  address, // ← AÑADIR
+  address,
   price,
   bedrooms,
   bathrooms,
@@ -85,14 +85,14 @@ const imageArray = images || [{ url: image, alt: title }];
   </div>
 
   <div class="p-8 flex flex-col flex-1">
-    <div class="flex items-start justify-between mb-4">
-      <h3 class="font-serif font-bold text-2xl italic leading-tight">{title}</h3>
-      <div class="postal-stamp rotate-2">
-        <span class="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1">
-          {address ? 'Dirección' : 'Zona'}
-        </span>
-        <span class="text-sm">{address || `${location}, ${locationDistrict}`}</span>
-      </div>
+    <h3 class="font-serif font-bold text-2xl italic leading-tight mb-2">{title}</h3>
+
+    <!-- Dirección limpia con icono -->
+    <div class="flex items-start gap-2 text-gray-600 text-sm mb-4">
+      <Icon name="map-pin" size={16} class="mt-0.5 flex-shrink-0 text-sea-glass" />
+      <span class="font-serif italic leading-snug">
+        {address || `${location}, ${locationDistrict}`}
+      </span>
     </div>
 
     <div class="mt-auto pt-6 flex items-center justify-between border-t border-gray-50">
