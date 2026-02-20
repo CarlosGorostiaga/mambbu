@@ -7,6 +7,7 @@ interface Property {
   title: string;
   location: string;
   locationDistrict: string;
+  address?: string;
   price: string;
   bedrooms: number;
   bathrooms: number;
@@ -55,7 +56,7 @@ export default function PropertyCarousel({ properties }: PropertyCarouselProps) 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Número de “grupos” para dots en móvil
+  // Número de "grupos" para dots en móvil
   const groupsCount = useMemo(() => {
     if (!total) return 0;
     return Math.max(1, Math.ceil(total / visibleCards));
@@ -104,7 +105,6 @@ export default function PropertyCarousel({ properties }: PropertyCarouselProps) 
       setCanScrollLeft(container.scrollLeft > 2);
       setCanScrollRight(container.scrollLeft < maxScrollLeft - 2);
 
-      // Calcula índice “más cercano” por offsetLeft real
       const cards = getCards();
       if (!cards.length) return;
 
@@ -120,7 +120,6 @@ export default function PropertyCarousel({ properties }: PropertyCarouselProps) 
         }
       }
 
-      // OJO: nearest puede estar fuera del rango de inicio válido
       setCurrentIndex(clampIndex(nearest));
     };
 
@@ -139,10 +138,9 @@ export default function PropertyCarousel({ properties }: PropertyCarouselProps) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [total, visibleCards]);
 
-  // Si cambian properties (por render SSR o fetch), resetea a 0 y recalcula
+  // Si cambian properties, resetea a 0 y recalcula
   useEffect(() => {
     setCurrentIndex(0);
-    // Espera a que pinte y existan los cards
     requestAnimationFrame(() => scrollToIndex(0, 'auto'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [total]);
@@ -240,11 +238,12 @@ export default function PropertyCarousel({ properties }: PropertyCarouselProps) 
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
-          touchAction: 'pan-y', // permite scroll vertical normal
+          touchAction: 'pan-y',
         }}
       >
         {properties.map((property) => {
           const img0 = property.images?.[0];
+
           return (
             <a
               key={property.id}
@@ -265,7 +264,9 @@ export default function PropertyCarousel({ properties }: PropertyCarouselProps) 
 
                   {/* Badges */}
                   <div className="absolute top-6 left-6 z-10 flex flex-col gap-2 pointer-events-none">
-                    {property.featured && <span className="cuba-badge">★ Anuncio Destacado</span>}
+                    {property.featured && (
+                      <span className="cuba-badge">★ Anuncio Destacado</span>
+                    )}
                     {property.verified && (
                       <div className="verified-stamp">
                         <span className="text-xs mr-1">✓</span>
@@ -304,10 +305,11 @@ export default function PropertyCarousel({ properties }: PropertyCarouselProps) 
 
                   <div className="postal-stamp rotate-2 inline-block mb-4">
                     <span className="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1">
-                      Zona Postal
+                      {property.address ? 'Dirección' : 'Zona'}
                     </span>
                     <span className="text-sm">
-                      {property.location}, {property.locationDistrict}
+                      {property.address ||
+                        `${property.location}, ${property.locationDistrict}`}
                     </span>
                   </div>
 

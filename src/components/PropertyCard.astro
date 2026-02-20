@@ -6,6 +6,7 @@ export interface Props {
   title: string;
   location: string;
   locationDistrict: string;
+  address?: string; // ← AÑADIR
   price: string;
   bedrooms: number;
   bathrooms: number;
@@ -23,6 +24,7 @@ const {
   title,
   location,
   locationDistrict,
+  address, // ← AÑADIR
   price,
   bedrooms,
   bathrooms,
@@ -87,9 +89,9 @@ const imageArray = images || [{ url: image, alt: title }];
       <h3 class="font-serif font-bold text-2xl italic leading-tight">{title}</h3>
       <div class="postal-stamp rotate-2">
         <span class="text-[10px] block uppercase tracking-tighter font-sans not-italic text-gray-400 leading-none mb-1">
-          Zona Postal
+          {address ? 'Dirección' : 'Zona'}
         </span>
-        <span class="text-sm">{location}, {locationDistrict}</span>
+        <span class="text-sm">{address || `${location}, ${locationDistrict}`}</span>
       </div>
     </div>
 
