@@ -1,58 +1,34 @@
 ---
 export const prerender = true;
-export const revalidate = 3600;
+export const revalidate = 3600; // ISR cada hora
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Hero from '../components/Hero.astro';
-import FeaturedProperties from '../components/FeaturedProperties.astro';
+import PropertyCarousel from '../components/PropertyCarousel';
 import Stats from '../components/Stats.astro';
 import About from '../components/About.astro';
 import Neighborhoods from '../components/Neighborhoods.astro';
 import CTA from '../components/CTA.astro';
+import Icon from '../components/Icon.astro';
+import { fetchProperties } from '../lib/api';
 
-// Datos de propiedades (en producción vendrían de una API o base de datos)
-const featuredProperties = [
-  {
-    title: 'Mansión de los Años 50',
-    location: 'Miramar',
-    locationDistrict: 'Playa',
-    price: '$450,000',
-    bedrooms: 4,
-    bathrooms: 3,
-    area: '420m²',
-    image: '/images/property-1.jpg',
-    featured: true,
-    slug: 'mansion-anos-50-miramar', // ✅ Correcto
-  },
-  {
-    title: 'Ático con Vistas al Malecón',
-    location: 'Vedado',
-    locationDistrict: 'Plaza',
-    price: '$125,000',
-    bedrooms: 2,
-    bathrooms: 2,
-    area: '115m²',
-    image: '/images/property-2.jpg',
-    newListing: true,
-    slug: 'atico-vistas-malecon-vedado', // ✅ Correcto
-  },
-  {
-    title: 'Palacete Colonial Restaurado',
-    location: 'Habana Vieja',
-    locationDistrict: 'Habana Vieja',
-    price: '$280,000',
-    bedrooms: 5,
-    bathrooms: 4,
-    area: '510m²',
-    image: '/images/property-3.jpg',
-    verified: true,
-    slug: 'palacete-colonial-habana-vieja', // ✅ Correcto (faltaba este)
-  },
-];
+// Obtener propiedades destacadas desde la API
+const featuredResponse = await fetchProperties({
+  featured: true,
+  perPage: 6,
+});
+const featuredProperties = featuredResponse.data;
 
-// Barrios emblemáticos
+// Obtener últimas adiciones (ordenadas por más recientes)
+const latestResponse = await fetchProperties({
+  sortBy: 'newest',
+  perPage: 6,
+});
+const latestProperties = latestResponse.data;
+
+// Barrios emblemáticos (mantener hardcoded por ahora)
 const neighborhoods = [
   { name: 'Miramar', count: 87, image: '/images/neighborhood-miramar.jpg' },
   { name: 'Vedado', count: 124, image: '/images/neighborhood-vedado.jpg' },
@@ -65,7 +41,69 @@ const neighborhoods = [
 
   <main>
     <Hero />
-    <FeaturedProperties properties={featuredProperties} />
+
+    <!-- Propiedades Destacadas -->
+    {
+      featuredProperties.length > 0 && (
+        <section class="max-w-[1440px] mx-auto px-6 py-24">
+          <div class="flex items-end justify-between mb-12">
+            <div>
+              <span class="text-sea-glass font-bold text-[11px] uppercase tracking-[0.3em] mb-4 block">
+                Propiedades Premium
+              </span>
+              <h2 class="font-serif text-5xl italic font-bold text-primary">
+                Propiedades Destacadas
+              </h2>
+            </div>
+
+            <a
+              class="text-[11px] font-bold uppercase tracking-wider border-b-2 border-primary pb-1 flex items-center gap-2 group hover:text-sea-glass hover:border-sea-glass transition-all"
+              href="/propiedades?featured=true"
+            >
+              Ver todas las destacadas
+              <Icon
+                name="arrow-right"
+                size={14}
+                class="group-hover:translate-x-1 transition-transform"
+              />
+            </a>
+          </div>
+
+          <PropertyCarousel properties={featuredProperties} client:visible />
+        </section>
+      )
+    }
+
+    <!-- Últimas Adiciones -->
+    {
+      latestProperties.length > 0 && (
+        <section class="max-w-[1440px] mx-auto px-6 py-24 bg-cream">
+          <div class="flex items-end justify-between mb-12">
+            <div>
+              <span class="text-sea-glass font-bold text-[11px] uppercase tracking-[0.3em] mb-4 block">
+                Recién Publicadas
+              </span>
+              <h2 class="font-serif text-5xl italic font-bold text-primary">Últimas Adiciones</h2>
+            </div>
+
+            <a
+              class="text-[11px] font-bold uppercase tracking-wider border-b-2 border-primary pb-1 flex items-center gap-2 group hover:text-sea-glass hover:border-sea-glass transition-all"
+              href="/propiedades"
+            >
+              Ver todas las propiedades
+              <Icon
+                name="arrow-right"
+                size={14}
+                class="group-hover:translate-x-1 transition-transform"
+              />
+            </a>
+          </div>
+
+          <PropertyCarousel properties={latestProperties} client:visible />
+        </section>
+      )
+    }
+
     <Stats />
     <About />
     <Neighborhoods neighborhoods={neighborhoods} />
