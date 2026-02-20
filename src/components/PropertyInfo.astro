@@ -5,6 +5,7 @@ export interface Props {
   title: string;
   location: string;
   locationDistrict: string;
+  address?: string; // ← AÑADIR
   price: string;
   bedrooms: number;
   bathrooms: number;
@@ -20,6 +21,7 @@ const {
   title,
   location,
   locationDistrict,
+  address, // ← AÑADIR
   price,
   bedrooms,
   bathrooms,
@@ -46,9 +48,18 @@ const {
       }
     </div>
     <h2 class="text-5xl font-serif font-bold italic leading-tight mb-3">{title}</h2>
-    <div class="flex items-center gap-2 text-gray-500 text-sm">
-      <Icon name="map-pin" size={16} />
-      <span class="font-serif italic">{location}, {locationDistrict}, La Habana</span>
+    
+    <!-- Dirección prominente -->
+    <div class="flex items-start gap-2 text-gray-700 mb-2">
+      <Icon name="map-pin" size={20} class="mt-1 flex-shrink-0" />
+      <div class="font-serif">
+        {address && (
+          <div class="text-lg font-semibold mb-1">{address}</div>
+        )}
+        <div class="text-sm italic text-gray-500">
+          {location}, {locationDistrict}, La Habana
+        </div>
+      </div>
     </div>
   </div>
 
@@ -133,8 +144,11 @@ const {
         >
           <Icon name="map-pin" class="text-sea-glass" size={48} />
           <div class="text-center">
+            {address && (
+              <div class="text-base font-semibold mb-2 max-w-sm">{address}</div>
+            )}
             <span class="block text-xs font-bold uppercase tracking-wider text-gray-400"
-              >Zona Postal</span
+              >Zona</span
             >
             <span class="block text-lg font-serif italic font-bold"
               >{location}, {locationDistrict}</span
